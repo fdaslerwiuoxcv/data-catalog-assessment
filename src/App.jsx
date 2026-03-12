@@ -769,10 +769,11 @@ function SectionForm({ section, sectionIndex, answers, setAnswers, onNext, onBac
 function LoadingScreen() {
   const [step, setStep] = useState(0);
   const steps = ["Analyzing 42 evaluation criteria...", "Scoring 5 tools across 5 dimensions...", "Generating fit rationale...", "Computing detailed criteria matrix...", "Preparing your report..."];
+  const stepsLen = steps.length;
   useEffect(() => {
-    const interval = setInterval(() => setStep(s => (s + 1) % steps.length), 2200);
+    const interval = setInterval(() => setStep(s => (s + 1) % stepsLen), 2200);
     return () => clearInterval(interval);
-  }, []);
+  }, [stepsLen]);
   return (
     <div style={{ minHeight: "calc(100vh - 60px)", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: "2rem" }}>
       <div style={{ position: "relative", width: 64, height: 64 }}>
@@ -1271,6 +1272,7 @@ function ScoreCell({ val, max, onChange, color }) {
   );
 }
 
+// eslint-disable-next-line no-unused-vars
 function MatrixScreen({ result, answers, apiKey, onBack }) {
   const clientName = answers.profile?.client_name || "Client";
   const DEFAULT_VENDORS = TOOLS.map(t => ({ id: t.id, name: t.name, shortName: t.shortName, color: t.color }));
@@ -1284,11 +1286,11 @@ function MatrixScreen({ result, answers, apiKey, onBack }) {
   const [newName, setNewName] = useState("");
   const [newColor, setNewColor] = useState("#9B59B6");
   const [activeGroup, setActiveGroup] = useState(null); // topic filter
-  const [expandedRows, setExpandedRows] = useState({});
 
   const COLORS_PALETTE = ["#9B59B6","#E42600","#FF7A00","#FFC400","#00CB5D","#0072BC","#19A3FC","#E91E63","#1ABC9C","#F39C12"];
 
   // Initial load — generate matrix
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => { generateMatrix(vendors); }, []);
 
   async function generateMatrix(vendorList) {
@@ -1346,12 +1348,6 @@ function MatrixScreen({ result, answers, apiKey, onBack }) {
 
   function updateWeight(criterionId, val) {
     setMatrixData(prev => ({ ...prev, [criterionId]: { ...prev[criterionId], wt: val } }));
-  }
-
-  function getTotal(criterionId, vendorId) {
-    if (!matrixData?.[criterionId]) return 0;
-    const { sel, sol } = matrixData[criterionId][vendorId] || { sel: 0, sol: 0 };
-    return sel * sol;
   }
 
   function getFinal(criterionId, vendorId) {
