@@ -1645,15 +1645,16 @@ function MatrixScreen({ result, answers, apiKey, onBack }) {
 // ═══════════════════════════════════════════════════════════════════════════════
 
 async function callAnthropicAPI(prompt, apiKey) {
-  // Route through Netlify serverless function when env key is used (avoids CORS in production).
-  // Fall back to direct call only when a manual key is entered via the API key gate.
-  const useFunction = !apiKey;
-  const url = useFunction
-    ? "/.netlify/functions/anthropic"
-    : "https://api.anthropic.com/v1/messages";
+  // In production (any non-localhost host) always route through the Netlify function —
+  // the function holds the key server-side and avoids CORS entirely.
+  // In local dev (localhost) fall back to a direct browser call using the manually-entered key.
+  const isLocal = window.location.hostname === "localhost";
+  const url = isLocal
+    ? "https://api.anthropic.com/v1/messages"
+    : "/.netlify/functions/anthropic";
 
   const headers = { "Content-Type": "application/json" };
-  if (!useFunction) {
+  if (isLocal) {
     headers["anthropic-version"] = "2023-06-01";
     headers["anthropic-dangerous-direct-browser-calls"] = "true";
     headers["x-api-key"] = apiKey;
