@@ -285,22 +285,37 @@ const getAns = (answers, section, q) => {
   return v || "Not specified";
 };
 
-function buildPrompt(answers) {
-  const allCrit = { ...(answers.criteria_a || {}), ...(answers.criteria_b || {}) };
-  const critList = CRITERIA.map(c => `${c.id}:${c.topic.replace(/,/g,'')}=${allCrit[`c${c.id}`]??0}`).join(",");
-
-  return `You are a senior NTT DATA data governance consultant. Score 5 data catalog tools against 42 client criteria. Return ONLY raw JSON — no markdown, no prose, no code fences.
-
-CLIENT: ${getAns(answers,"profile","client_name")} | ${getAns(answers,"profile","industry")} | ${getAns(answers,"profile","org_size")} employees
+function buildClientContext(answers) {
+  return `CLIENT: ${getAns(answers,"profile","client_name")} | ${getAns(answers,"profile","industry")} | ${getAns(answers,"profile","org_size")} employees
 DRIVER: ${getAns(answers,"profile","primary_goal")}
 CLOUD: ${getAns(answers,"technical","cloud_platform")} | DEPLOY: ${getAns(answers,"technical","deployment")}
 EXISTING TOOLS: ${getAns(answers,"technical","existing_tools")}
 MATURITY: ${getAns(answers,"maturity","dg_maturity")} | TIMELINE: ${getAns(answers,"maturity","timeline")}
 BUDGET: ${getAns(answers,"cost","budget")} | CONTRACTS: ${getAns(answers,"cost","contracts")}
 COMPLIANCE: ${getAns(answers,"compliance","regulations")} | RESIDENCY: ${getAns(answers,"compliance","data_residency")}
-FUNCTIONAL (1-5): lineage=${getAns(answers,"functional","lineage")} glossary=${getAns(answers,"functional","glossary")} stewardship=${getAns(answers,"functional","stewardship")} discovery=${getAns(answers,"functional","discovery")} dq=${getAns(answers,"functional","dq_integration")} policy=${getAns(answers,"functional","policy_mgmt")}
+FUNCTIONAL (1-5): lineage=${getAns(answers,"functional","lineage")} glossary=${getAns(answers,"functional","glossary")} stewardship=${getAns(answers,"functional","stewardship")} discovery=${getAns(answers,"functional","discovery")} dq=${getAns(answers,"functional","dq_integration")} policy=${getAns(answers,"functional","policy_mgmt")}`;
+}
 
-CRITERIA (id:topic=clientPriority): ${critList}
+function buildNarrativePrompt(answers) {
+  const ctx = buildClientContext(answers);
+  return `You are a senior NTT DATA data governance consultant. Based on the client profile below, provide fit analysis for 5 data catalog tools. Return ONLY raw JSON — no markdown, no code fences.
+
+${ctx}
+
+TOOLS: purview=MicrosoftPurview collibra=Collibra alation=Alation atlan=Atlan cdgc=InformaticaCDGC
+
+Return this exact JSON:
+{"rationale":{"purview":"2-3 sentences","collibra":"2-3 sentences","alation":"2-3 sentences","atlan":"2-3 sentences","cdgc":"2-3 sentences"},"strengths":{"purview":["s1","s2","s3"],"collibra":["s1","s2","s3"],"alation":["s1","s2","s3"],"atlan":["s1","s2","s3"],"cdgc":["s1","s2","s3"]},"gaps":{"purview":["g1","g2"],"collibra":["g1","g2"],"alation":["g1","g2"],"atlan":["g1","g2"],"cdgc":["g1","g2"]},"executiveSummary":"3-4 sentences naming top tool and runner-up with key reasons.","topPick":"purview","runnerUp":"collibra"}`;
+}
+
+function buildMatrixPrompt(answers) {
+  const ctx = buildClientContext(answers);
+  const allCrit = { ...(answers.criteria_a || {}), ...(answers.criteria_b || {}) };
+  const critList = CRITERIA.map(c => `${c.id}:${c.topic.replace(/[,|]/g,'')}=${allCrit[`c${c.id}`]??0}`).join(",");
+  return `You are a senior NTT DATA data governance consultant. Score 5 data catalog tools against 42 client criteria. Return ONLY raw JSON — no markdown, no code fences.
+
+${ctx}
+CRITERIA (id:topic=clientPriority 0-5): ${critList}
 
 TOOLS: purview=MicrosoftPurview collibra=Collibra alation=Alation atlan=Atlan cdgc=InformaticaCDGC
 
@@ -309,9 +324,10 @@ sol: 0=NotAvailable 1=CustomDev 2=ConfigRequired 3=OutOfBox
 wt: 1=NiceToHave 2=Desirable 3=Essential
 If clientPriority=0 set sol=0. Differentiate sol scores — they drive all dimension rankings.
 
-Return this exact JSON (all 42 criteria required in matrix.criteria):
-{"rationale":{"purview":"2-3 sentences","collibra":"2-3 sentences","alation":"2-3 sentences","atlan":"2-3 sentences","cdgc":"2-3 sentences"},"strengths":{"purview":["s1","s2","s3"],"collibra":["s1","s2","s3"],"alation":["s1","s2","s3"],"atlan":["s1","s2","s3"],"cdgc":["s1","s2","s3"]},"gaps":{"purview":["g1","g2"],"collibra":["g1","g2"],"alation":["g1","g2"],"atlan":["g1","g2"],"cdgc":["g1","g2"]},"executiveSummary":"3-4 sentences naming top tool and runner-up with key reasons.","topPick":"purview","runnerUp":"collibra","matrix":{"criteria":[{"id":1,"wt":2,"purview":{"sol":2},"collibra":{"sol":3},"alation":{"sol":2},"atlan":{"sol":2},"cdgc":{"sol":2}}]}}`;
+Return this exact JSON (all 42 criteria required):
+{"matrix":{"criteria":[{"id":1,"wt":2,"purview":{"sol":2},"collibra":{"sol":3},"alation":{"sol":2},"atlan":{"sol":2},"cdgc":{"sol":2}}]}}`;
 }
+
 
 // ── Option A: Dimension scores derived from criteria (Sel × Sol × Wt rollup) ──
 
@@ -1756,9 +1772,12 @@ export default function App() {
     } else {
       setScreen("loading");
       try {
-        const prompt = buildPrompt(answers);
-        const data = await callAnthropicAPI(prompt, apiKey);
-        setResult(data);
+        // Two sequential calls to stay under gateway timeout limits
+        const [narrative, matrix] = await Promise.all([
+          callAnthropicAPI(buildNarrativePrompt(answers), apiKey),
+          callAnthropicAPI(buildMatrixPrompt(answers), apiKey),
+        ]);
+        setResult({ ...narrative, ...matrix });
         setScreen("results");
       } catch (e) {
         setError(e.message);
