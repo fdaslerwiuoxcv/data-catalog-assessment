@@ -102,39 +102,6 @@ const SEL_LABELS = ["0 - Does not meet","1 - Partially meets","2 - Minimally mee
 const SOL_LABELS = ["0 - Not Available","1 - Custom Dev required","2 - Requires configuration","3 - Out of the Box"];
 const WT_LABELS  = ["1x - Nice to Have","2x - Desirable","3x - Essential / Critical"];
 
-function buildMatrixPrompt(answers, vendorIds) {
-  const clientName = answers.profile?.client_name || "the client";
-  const getAns = (sec, q) => { const v = answers[sec]?.[q]; return Array.isArray(v) ? v.join(", ") : v || "Not specified"; };
-
-  const clientCtx = `Client: ${clientName} | Industry: ${getAns("profile","industry")} | Size: ${getAns("profile","org_size")}
-Primary driver: ${getAns("profile","primary_goal")} | Deployment: ${getAns("technical","deployment")} | Cloud: ${getAns("technical","cloud_platform")}
-Existing tools: ${getAns("technical","existing_tools")} | Data sources: ${getAns("technical","data_sources")}
-DG Maturity: ${getAns("maturity","dg_maturity")} | Budget: ${getAns("cost","budget")} | Contracts: ${getAns("cost","contracts")}
-Regulations: ${getAns("compliance","regulations")} | Audit: ${getAns("compliance","audit_trail")} | PII: ${getAns("compliance","pii_classification")}`;
-
-  const vendorList = vendorIds.join(", ");
-
-  return `You are a senior data governance consultant at NTT DATA. Score each of the 42 evaluation criteria for each tool listed below, based on the client requirements provided.
-
-CLIENT REQUIREMENTS:
-${clientCtx}
-
-TOOLS TO SCORE: ${vendorList}
-
-For each criterion, provide:
-- sel: Selection Score 0-5 (5=impressively exceeds, 4=exceeds, 3=meets, 2=minimally meets, 1=partially meets, 0=does not meet)
-- sol: Solution Score 0-3 (3=Out of Box, 2=Requires Configuration, 1=Custom Development, 0=Not Available)
-- wt: Suggested weight 1-3 (3=Essential/Critical to this client, 2=Desirable, 1=Nice to Have) — based on client's stated priorities
-
-Differentiate scores meaningfully. Consider actual tool capabilities and this client's specific requirements.
-
-Return ONLY a raw JSON object. No markdown, no prose. Start with { end with }. All values must be plain integers.
-
-Format: {"criteria":[{"id":1,"wt":2,"purview":{"sel":4,"sol":3},"collibra":{"sel":3,"sol":2},"alation":{"sel":3,"sol":3},"atlan":{"sel":2,"sol":3},"cdgc":{"sel":3,"sol":2}},{"id":2,...},...]}
-
-All 42 criteria must be present (id 1 through 42).`;
-}
-
 
 // ── Sample data pre-populated for demo / testing purposes ──────────────────
 const SAMPLE_ANSWERS = {
