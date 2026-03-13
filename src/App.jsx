@@ -53,48 +53,48 @@ const DIMENSIONS = [
 // cost        — budget and licensing
 // compliance  — regulatory, security, audit
 const CRITERIA = [
-  { id:1,  poc:"B", dim:"functional",  topic:"Business Glossary",           desc:"Does the metadata repository consist of both business and technical definitions, and can it be easily browsed by end users and power users via client/server and/or Web Connections?" },
-  { id:2,  poc:"T", dim:"functional",  topic:"Business Glossary",           desc:"Does the repository allow for custom business metadata crowd sourced from users? (Ex. Ability to store metric calculation details, use cases, value identified $, Issues Identified)?" },
-  { id:3,  poc:"T", dim:"functional",  topic:"Data Catalog",                desc:"Is there support to generate, manage, and maintain transformation rules?" },
-  { id:4,  poc:"T", dim:"functional",  topic:"Data Catalog",                desc:"Is there support to generate, manage, and maintain derived computations?" },
-  { id:5,  poc:"T", dim:"functional",  topic:"Data Catalog",                desc:"Is there ML support for automatic generation of source data definitions, transformation objects, target data models, and operational statistics?" },
-  { id:6,  poc:"T", dim:"technical",   topic:"Data Catalog",                desc:"Does the tool collect Business and Technical metadata from ERP systems, such as SAP?" },
-  { id:7,  poc:"T", dim:"technical",   topic:"Data Catalog",                desc:"Does the tool integrate with preferred BI Tools (e.g. Tableau, Power BI, Sisense, Looker)?" },
-  { id:8,  poc:"T", dim:"functional",  topic:"Data Dictionary",             desc:"Is there support for automatic generation of source data definitions, transformation objects, target data models, and operational statistics?" },
-  { id:9,  poc:"T", dim:"functional",  topic:"Data Lineage",                desc:"Is there the ability to support Data Lineage analysis from source systems all of the way through to the reports with all the transformation steps in between?" },
-  { id:10, poc:"T", dim:"technical",   topic:"Data Lineage",                desc:"Does the tool have ability to automatically build Lineage from ETL platforms (e.g. SQL Stored Procedures, Database Views, data movement routines)?" },
-  { id:11, poc:"T", dim:"functional",  topic:"Data Lineage",                desc:"Does the tool allow for automatic propagation of changes in the metadata and its impact on Lineage?" },
-  { id:12, poc:"T", dim:"functional",  topic:"Data Lineage",                desc:"Does the Tool allow for storing and displaying different levels of lineage information — High level, system level data flow all the way up to field level dataflow?" },
-  { id:13, poc:"T", dim:"compliance",  topic:"Data Lineage/Lifecycle Mgmt", desc:"Ability to locate, report, and be able to delete data of any individual, based on PII laws." },
-  { id:14, poc:"T", dim:"functional",  topic:"Data Linking and Search",     desc:"Are automatic propagation of changes supported?" },
-  { id:15, poc:"T", dim:"functional",  topic:"Data Quality",                desc:"Does the tool provide System metadata such as last refresh date/time of the dataset?" },
-  { id:16, poc:"T", dim:"functional",  topic:"Data Quality",                desc:"Does the tool provide data quality score based on pre-defined rules and thresholds?" },
-  { id:17, poc:"B", dim:"maturity",    topic:"Data Quality",                desc:"Does the tool provide ability for non-technical business users to define business rules as simple language and can be pointed to different databases for its implementation?" },
-  { id:18, poc:"T", dim:"functional",  topic:"Data Quality",                desc:"Does the tool allow for defining workflows based on data quality checks for orchestration of changes to improve data quality? The workflow can also include manual intervention by Data Owners and Data Stewards." },
-  { id:19, poc:"T", dim:"functional",  topic:"Tags",                        desc:"Does the tool allow for adding multiple Tags?" },
-  { id:20, poc:"B", dim:"maturity",    topic:"Usability",                   desc:"Does the tool offer ML enabled definition/categorization/Tagging of data?" },
-  { id:21, poc:"B", dim:"maturity",    topic:"Usability",                   desc:"Ease of Use. How quickly can users get up to speed with the tools, and how much training and support will they require?" },
-  { id:22, poc:"B", dim:"maturity",    topic:"Usability",                   desc:"Does the toolset allow multiple users to work on the same project concurrently, sharing ideas and results?" },
-  { id:23, poc:"B", dim:"technical",   topic:"Usability",                   desc:"Can users attach to the development environment via a LAN, WAN, or the Internet?" },
-  { id:24, poc:"B", dim:"maturity",    topic:"Usability",                   desc:"Does the tool provide a point and click environment versus programming?" },
-  { id:25, poc:"T", dim:"functional",  topic:"Usability",                   desc:"Does the tool enable clear ownership / stewardship and data management capabilities for data products?" },
-  { id:26, poc:"T", dim:"functional",  topic:"Usability",                   desc:"Does the tool allow for multiple owners (Business Owner / IT Owner) of each data collection?" },
-  { id:27, poc:"T", dim:"maturity",    topic:"Usability",                   desc:"Does the tool leverage machine learning to reduce the administrative burden on data stewards and data owners?" },
-  { id:28, poc:"T", dim:"functional",  topic:"Usability",                   desc:"Does the tool provide data about how users interact with data sources or the repository itself? (Ex. top users, sort by popularity)" },
-  { id:29, poc:"B", dim:"functional",  topic:"Usability — Search",          desc:"Ability to search Taxonomy, business glossary, Tags, Table Name, Field names (Metadata), and data owners." },
-  { id:30, poc:"T", dim:"compliance",  topic:"Security",                    desc:"Does the tool allow source and target database Security to prevail?" },
-  { id:31, poc:"T", dim:"compliance",  topic:"Security",                    desc:"Does the tool require registration of users to gain access to environment?" },
-  { id:32, poc:"T", dim:"compliance",  topic:"Security",                    desc:"Does the tool allow for user permissions to be set by work area (or folder)?" },
-  { id:33, poc:"T", dim:"technical",   topic:"Setup and Configuration",     desc:"What is the ease of installation and configuration?" },
-  { id:34, poc:"T", dim:"technical",   topic:"Setup and Configuration",     desc:"Does the platform have the capabilities of a modern application? (Ex. elastic, resilient, automation & monitoring)" },
-  { id:35, poc:"T", dim:"technical",   topic:"Setup and Configuration",     desc:"Does the tool capture metadata across On-premise and Cloud environments?" },
-  { id:36, poc:"T", dim:"technical",   topic:"Setup and Configuration",     desc:"Does the tool integrate with preferred BI Tools (e.g. Sisense, Tableau)?" },
-  { id:37, poc:"T", dim:"technical",   topic:"Setup and Configuration",     desc:"Does the tool read the metadata tags, query logs, and table schemas from common data repositories (e.g. AWS Redshift, SQL Server, Tableau Server)?" },
-  { id:38, poc:"T", dim:"cost",        topic:"Cost",                        desc:"Is the enterprise cost of the tool within expected budget?" },
-  { id:39, poc:"T", dim:"cost",        topic:"Cost",                        desc:"What is the licensing model? (Enterprise License, User based License, Usage/CPU based License, etc.)" },
-  { id:40, poc:"T", dim:"cost",        topic:"Cost",                        desc:"What is the one time license cost and what is the running annual license cost?" },
-  { id:41, poc:"T", dim:"compliance",  topic:"Audit Capability",            desc:"Can the tool produce audit and operational reports for each table update of the environment?" },
-  { id:42, poc:"T", dim:"compliance",  topic:"Audit Capability",            desc:"Can metadata compliance against metadata standards be reported on?" },
+  { id:1,  poc:"B", dim:"functional",  topic:"Business Glossary",           desc:"The metadata repository consists of both business and technical definitions, easily browsed by end users and power users via client/server and/or web connections." },
+  { id:2,  poc:"T", dim:"functional",  topic:"Business Glossary",           desc:"The repository allows custom business metadata crowdsourced from users (e.g. metric calculations, use cases, value identified, issues)." },
+  { id:3,  poc:"T", dim:"functional",  topic:"Data Catalog",                desc:"The tool supports generating, managing, and maintaining transformation rules." },
+  { id:4,  poc:"T", dim:"functional",  topic:"Data Catalog",                desc:"The tool supports generating, managing, and maintaining derived computations." },
+  { id:5,  poc:"T", dim:"functional",  topic:"Data Catalog",                desc:"The tool provides ML support for automatic generation of source data definitions, transformation objects, target data models, and operational statistics." },
+  { id:6,  poc:"T", dim:"technical",   topic:"Data Catalog",                desc:"The tool collects business and technical metadata from ERP systems such as SAP." },
+  { id:7,  poc:"T", dim:"technical",   topic:"Data Catalog",                desc:"The tool integrates with preferred BI tools (e.g. Tableau, Power BI, Sisense, Looker)." },
+  { id:8,  poc:"T", dim:"functional",  topic:"Data Dictionary",             desc:"The tool automatically generates source data definitions, transformation objects, target data models, and operational statistics." },
+  { id:9,  poc:"T", dim:"functional",  topic:"Data Lineage",                desc:"The tool supports end-to-end data lineage from source systems through to reports, including all transformation steps." },
+  { id:10, poc:"T", dim:"technical",   topic:"Data Lineage",                desc:"The tool automatically builds lineage from ETL platforms (e.g. SQL stored procedures, database views, data movement routines)." },
+  { id:11, poc:"T", dim:"functional",  topic:"Data Lineage",                desc:"The tool automatically propagates metadata changes and reflects their impact on lineage." },
+  { id:12, poc:"T", dim:"functional",  topic:"Data Lineage",                desc:"The tool stores and displays multiple levels of lineage — from high-level system flow down to field-level dataflow." },
+  { id:13, poc:"T", dim:"compliance",  topic:"Data Lineage/Lifecycle Mgmt", desc:"The tool can locate, report, and delete personal data for any individual in compliance with PII regulations." },
+  { id:14, poc:"T", dim:"functional",  topic:"Data Linking and Search",     desc:"The tool automatically propagates changes across linked data assets and metadata." },
+  { id:15, poc:"T", dim:"functional",  topic:"Data Quality",                desc:"The tool provides system metadata such as last refresh date/time for each dataset." },
+  { id:16, poc:"T", dim:"functional",  topic:"Data Quality",                desc:"The tool provides a data quality score based on pre-defined rules and thresholds." },
+  { id:17, poc:"B", dim:"maturity",    topic:"Data Quality",                desc:"Non-technical business users can define business rules in plain language and apply them across different databases." },
+  { id:18, poc:"T", dim:"functional",  topic:"Data Quality",                desc:"The tool supports defining workflows triggered by data quality checks, including manual intervention by data owners and stewards." },
+  { id:19, poc:"T", dim:"functional",  topic:"Tags",                        desc:"The tool supports adding multiple tags to data assets." },
+  { id:20, poc:"B", dim:"maturity",    topic:"Usability",                   desc:"The tool offers ML-enabled definition, categorization, and tagging of data assets." },
+  { id:21, poc:"B", dim:"maturity",    topic:"Usability",                   desc:"The tool is easy to use — users can get up to speed quickly with minimal training and support." },
+  { id:22, poc:"B", dim:"maturity",    topic:"Usability",                   desc:"Multiple users can work on the same project concurrently, sharing ideas and results." },
+  { id:23, poc:"B", dim:"technical",   topic:"Usability",                   desc:"Users can connect to the environment via LAN, WAN, or the internet." },
+  { id:24, poc:"B", dim:"maturity",    topic:"Usability",                   desc:"The tool provides a point-and-click environment that minimises the need for programming." },
+  { id:25, poc:"T", dim:"functional",  topic:"Usability",                   desc:"The tool enables clear ownership, stewardship, and data management capabilities for data products." },
+  { id:26, poc:"T", dim:"functional",  topic:"Usability",                   desc:"The tool supports multiple owners (business and IT) per data collection." },
+  { id:27, poc:"T", dim:"maturity",    topic:"Usability",                   desc:"The tool leverages machine learning to reduce administrative burden on data stewards and owners." },
+  { id:28, poc:"T", dim:"functional",  topic:"Usability",                   desc:"The tool provides usage analytics showing how users interact with data sources and the repository (e.g. top users, popularity rankings)." },
+  { id:29, poc:"B", dim:"functional",  topic:"Usability — Search",          desc:"The tool enables search across taxonomy, business glossary, tags, table names, field names, and data owners." },
+  { id:30, poc:"T", dim:"compliance",  topic:"Security",                    desc:"The tool respects and enforces source and target database security controls." },
+  { id:31, poc:"T", dim:"compliance",  topic:"Security",                    desc:"The tool requires user registration and authentication to access the environment." },
+  { id:32, poc:"T", dim:"compliance",  topic:"Security",                    desc:"The tool supports setting user permissions at the work area or folder level." },
+  { id:33, poc:"T", dim:"technical",   topic:"Setup and Configuration",     desc:"The tool is easy to install and configure with minimal setup complexity." },
+  { id:34, poc:"T", dim:"technical",   topic:"Setup and Configuration",     desc:"The platform has modern application capabilities including elasticity, resilience, automation, and monitoring." },
+  { id:35, poc:"T", dim:"technical",   topic:"Setup and Configuration",     desc:"The tool captures metadata across both on-premise and cloud environments." },
+  { id:36, poc:"T", dim:"technical",   topic:"Setup and Configuration",     desc:"The tool integrates with preferred BI tools (e.g. Sisense, Tableau, Power BI)." },
+  { id:37, poc:"T", dim:"technical",   topic:"Setup and Configuration",     desc:"The tool reads metadata tags, query logs, and table schemas from common data repositories (e.g. Redshift, SQL Server, Tableau Server)." },
+  { id:38, poc:"T", dim:"cost",        topic:"Cost",                        desc:"The enterprise cost of the tool is within the expected budget." },
+  { id:39, poc:"T", dim:"cost",        topic:"Cost",                        desc:"The licensing model (enterprise, user-based, or usage/CPU-based) aligns with the organisation's commercial preferences." },
+  { id:40, poc:"T", dim:"cost",        topic:"Cost",                        desc:"The one-time and annual license costs are acceptable and represent good value for this organisation." },
+  { id:41, poc:"T", dim:"compliance",  topic:"Audit Capability",            desc:"The tool produces audit and operational reports for each table update in the environment." },
+  { id:42, poc:"T", dim:"compliance",  topic:"Audit Capability",            desc:"The tool reports on metadata compliance against defined metadata standards." },
 ];
 
 // Score labels
@@ -475,7 +475,7 @@ function Header({ clientName, onReset }) {
           </svg>
         </div>
         <div style={{ width: 1, height: 20, background: C.border }} />
-        <span className="outfit" style={{ fontWeight: 600, fontSize: "0.9rem", color: C.text }}>Data Catalog Fit Assessment</span>
+        <span className="outfit" style={{ fontWeight: 600, fontSize: "0.9rem", color: C.text }}>AI-Enabled Data Catalog Evaluation</span>
       </div>
       <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
         {clientName && <span style={{ fontSize: "0.8rem", color: C.textMuted, background: C.elevated, padding: "0.3rem 0.75rem", borderRadius: 20, border: `1px solid ${C.border}` }}>{clientName}</span>}
@@ -500,7 +500,7 @@ function IntroScreen({ onStart }) {
           <span className="mono" style={{ fontSize: "0.75rem", color: C.primary, letterSpacing: "0.1em" }}>AI-POWERED TOOL EVALUATION</span>
         </div>
         <h1 className="fraunces shimmer-text fade-up-1" style={{ fontSize: "clamp(2.4rem, 6vw, 3.5rem)", fontWeight: 700, lineHeight: 1.08, marginBottom: "1.25rem" }}>
-          Data Catalog<br />Fit Assessment
+          AI-Enabled Data Catalog<br />Evaluation
         </h1>
         <p className="fade-up-2" style={{ fontSize: "1.05rem", color: C.textMuted, lineHeight: 1.7, marginBottom: "2.5rem", maxWidth: 520, margin: "0 auto 2.5rem" }}>
           A structured evaluation framework that compares leading enterprise data catalog platforms against your client's specific requirements, maturity level, and business goals.
@@ -1718,6 +1718,7 @@ function ApiKeyGate({ onConfirm }) {
 const ENV_KEY = process.env.REACT_APP_ANTHROPIC_API_KEY || "";
 
 export default function App() {
+  useEffect(() => { document.title = "AI-Enabled Data Catalog Evaluation"; }, []);
   const [screen, setScreen] = useState("intro");      // intro | apikey | wizard | loading | results
   const [sectionIdx, setSectionIdx] = useState(0);
   const [answers, setAnswers] = useState(SAMPLE_ANSWERS);
