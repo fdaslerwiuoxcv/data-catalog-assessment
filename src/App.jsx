@@ -136,6 +136,68 @@ All 42 criteria must be present (id 1 through 42).`;
 }
 
 
+// ── Sample data pre-populated for demo / testing purposes ──────────────────
+const SAMPLE_ANSWERS = {
+  profile: {
+    client_name:  "Meridian Capital Group",
+    industry:     "Financial Services",
+    org_size:     "10,000 – 50,000",
+    data_domains: "16 – 30",
+    primary_goal: "Regulatory compliance & audit readiness",
+  },
+  functional: {
+    lineage:        5,
+    glossary:       4,
+    stewardship:    4,
+    discovery:      3,
+    dq_integration: 4,
+    policy_mgmt:    5,
+    ai_ml_metadata: 2,
+    collaboration:  2,
+  },
+  technical: {
+    deployment:     "Cloud-native / SaaS preferred",
+    cloud_platform: "Microsoft Azure",
+    existing_tools: ["Microsoft Purview / Azure Data Factory", "dbt Core / dbt Cloud", "Apache Spark / Databricks"],
+    data_sources:   ["Snowflake", "SQL Server / Azure SQL", "Salesforce", "SAP (S/4HANA, BW)"],
+    api_needs:      "Medium — standard REST APIs for key integrations",
+    asset_volume:   "100,000 – 1M assets",
+  },
+  maturity: {
+    dg_maturity:   "Level 3 – Defined (standardized processes, active stewards)",
+    steward_count: "21 – 50",
+    user_tech:     "Mixed — wide range of technical capability",
+    timeline:      "6 – 12 months",
+    team_capacity: "Small dedicated team (3 – 9 FTEs)",
+  },
+  cost: {
+    budget:           "$500K – $1M",
+    license_model:    "SaaS subscription (OpEx preferred)",
+    tco_sensitivity:  "High — cost is a primary decision factor",
+    contracts:        ["Microsoft Enterprise Agreement / Azure Commitment"],
+  },
+  compliance: {
+    regulations:        ["GDPR (EU data privacy)", "SOX (financial reporting)", "BCBS 239 (risk data aggregation)", "DORA (EU digital operational resilience)"],
+    data_residency:     "Strict — data must remain within a specific geography",
+    audit_trail:        "Critical — full audit trail required for regulatory exams",
+    pii_classification: "Extensive — large PII volumes, automated classification essential",
+  },
+  criteria_a: {
+    c1: 4, c2: 3, c3: 4, c4: 3, c5: 2,
+    c6: 4, c7: 4, c8: 3, c9: 5, c10: 5,
+    c11: 4, c12: 5, c13: 5, c14: 3, c15: 4,
+    c16: 4, c17: 3, c18: 4, c19: 3, c20: 3,
+    c21: 4,
+  },
+  criteria_b: {
+    c22: 3, c23: 4, c24: 4, c25: 5, c26: 4,
+    c27: 3, c28: 3, c29: 5, c30: 5, c31: 4,
+    c32: 5, c33: 3, c34: 4, c35: 5, c36: 4,
+    c37: 5, c38: 4, c39: 4, c40: 4, c41: 5,
+    c42: 5,
+  },
+};
+
 const SECTIONS = [
   { id: "profile",    title: "Organization Profile",      subtitle: "Context about the client organization",                        icon: "⬡", dim: null },
   { id: "functional", title: "Functional Capabilities",   subtitle: "Which catalog features are mission-critical?",                  icon: "◎", dim: "functional" },
@@ -1733,7 +1795,7 @@ const ENV_KEY = process.env.REACT_APP_ANTHROPIC_API_KEY || "";
 export default function App() {
   const [screen, setScreen] = useState("intro");      // intro | apikey | wizard | loading | results
   const [sectionIdx, setSectionIdx] = useState(0);
-  const [answers, setAnswers] = useState({});
+  const [answers, setAnswers] = useState(SAMPLE_ANSWERS);
   const [result, setResult] = useState(null);
   const [error, setError] = useState(null);
   const [apiKey, setApiKey] = useState(ENV_KEY || "");
