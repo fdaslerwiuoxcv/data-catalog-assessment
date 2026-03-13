@@ -1711,7 +1711,7 @@ function ApiKeyGate({ onConfirm }) {
 // MAIN APP
 // ═══════════════════════════════════════════════════════════════════════════════
 
-const ENV_KEY = typeof process !== "undefined" ? process.env?.REACT_APP_ANTHROPIC_API_KEY : undefined;
+const ENV_KEY = process.env.REACT_APP_ANTHROPIC_API_KEY || "";
 
 export default function App() {
   const [screen, setScreen] = useState("intro");      // intro | apikey | wizard | loading | results
