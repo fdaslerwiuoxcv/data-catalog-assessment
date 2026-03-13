@@ -224,84 +224,89 @@ const getAns = (answers, section, q) => {
 };
 
 function buildPrompt(answers) {
-  return `You are a senior data governance consultant at NTT DATA evaluating data catalog tool fit for a client. Score each of the 5 tools across 5 weighted dimensions based on the client requirements below, then provide recommendations.
+  const critA = answers.criteria_a || {};
+  const critB = answers.criteria_b || {};
+  const allCritAnswers = { ...critA, ...critB };
+  const criteriaLines = CRITERIA.map(c => {
+    const sel = allCritAnswers[`c${c.id}`] ?? 0;
+    return `[${c.id}] ${c.topic} | ${c.desc.slice(0, 80)}${c.desc.length > 80 ? "…" : ""} | Client Priority: ${sel}/5`;
+  }).join("\n");
+
+  return `You are a senior data governance consultant at NTT DATA evaluating data catalog tool fit.
 
 ## CLIENT REQUIREMENTS
 
 **Organization:** ${getAns(answers,"profile","client_name")} | Industry: ${getAns(answers,"profile","industry")} | Size: ${getAns(answers,"profile","org_size")} employees
-**Data domains to catalog:** ${getAns(answers,"profile","data_domains")} | **Primary driver:** ${getAns(answers,"profile","primary_goal")}
+**Data domains:** ${getAns(answers,"profile","data_domains")} | **Primary driver:** ${getAns(answers,"profile","primary_goal")}
 
-**Functional Priorities (1=Not Needed, 5=Critical):**
-- Data lineage (column-level): ${getAns(answers,"functional","lineage")}/5
-- Business glossary & metadata: ${getAns(answers,"functional","glossary")}/5
-- Data stewardship & workflows: ${getAns(answers,"functional","stewardship")}/5
-- Data discovery & search: ${getAns(answers,"functional","discovery")}/5
-- Data quality integration: ${getAns(answers,"functional","dq_integration")}/5
-- Policy & access governance: ${getAns(answers,"functional","policy_mgmt")}/5
-- AI/ML metadata governance: ${getAns(answers,"functional","ai_ml_metadata")}/5
-- Social collaboration: ${getAns(answers,"functional","collaboration")}/5
+**Functional Priorities (1=Low, 5=Critical):**
+- Data lineage: ${getAns(answers,"functional","lineage")}/5 | Business glossary: ${getAns(answers,"functional","glossary")}/5
+- Stewardship workflows: ${getAns(answers,"functional","stewardship")}/5 | Discovery & search: ${getAns(answers,"functional","discovery")}/5
+- Data quality: ${getAns(answers,"functional","dq_integration")}/5 | Policy governance: ${getAns(answers,"functional","policy_mgmt")}/5
 
-**Technical Fit:** Deployment: ${getAns(answers,"technical","deployment")} | Cloud: ${getAns(answers,"technical","cloud_platform")}
+**Technical:** Deployment: ${getAns(answers,"technical","deployment")} | Cloud: ${getAns(answers,"technical","cloud_platform")}
 Existing tools: ${getAns(answers,"technical","existing_tools")} | Data sources: ${getAns(answers,"technical","data_sources")}
-API needs: ${getAns(answers,"technical","api_needs")} | Asset volume: ${getAns(answers,"technical","asset_volume")}
 
-**Org Maturity:** DG maturity: ${getAns(answers,"maturity","dg_maturity")} | Stewards: ${getAns(answers,"maturity","steward_count")}
-User tech level: ${getAns(answers,"maturity","user_tech")} | Timeline: ${getAns(answers,"maturity","timeline")} | Team: ${getAns(answers,"maturity","team_capacity")}
+**Org Maturity:** ${getAns(answers,"maturity","dg_maturity")} | Stewards: ${getAns(answers,"maturity","steward_count")} | Timeline: ${getAns(answers,"maturity","timeline")}
 
-**Cost:** Budget: ${getAns(answers,"cost","budget")} | Model: ${getAns(answers,"cost","license_model")} | TCO sensitivity: ${getAns(answers,"cost","tco_sensitivity")}
+**Cost:** Budget: ${getAns(answers,"cost","budget")} | TCO sensitivity: ${getAns(answers,"cost","tco_sensitivity")}
 Existing contracts: ${getAns(answers,"cost","contracts")}
 
-**Compliance:** Regulations: ${getAns(answers,"compliance","regulations")} | Data residency: ${getAns(answers,"compliance","data_residency")}
-Audit trail: ${getAns(answers,"compliance","audit_trail")} | PII: ${getAns(answers,"compliance","pii_classification")}
+**Compliance:** ${getAns(answers,"compliance","regulations")} | Audit: ${getAns(answers,"compliance","audit_trail")} | PII: ${getAns(answers,"compliance","pii_classification")}
 
-## TOOLS TO SCORE
-purview = Microsoft Purview | collibra = Collibra | alation = Alation | atlan = Atlan | cdgc = Informatica CDGC
+## CONSULTANT-RATED CRITERIA (42 items)
+Format: [ID] Topic | Description | Client Priority (0=Not Required, 5=Mission Critical)
+${criteriaLines}
 
-## SCORING DIMENSIONS (weights)
-- functional (30%): Delivery on stated functional priorities
-- technical (25%): Deployment, cloud, integration, and scalability fit
-- maturity (20%): Appropriateness for org's maturity, team capacity, timeline
-- cost (15%): Budget alignment, licensing model, TCO, existing contracts leverage
-- compliance (10%): Regulatory framework support, audit trail, residency, PII auto-classification
+## TOOLS
+purview=Microsoft Purview | collibra=Collibra | alation=Alation | atlan=Atlan | cdgc=Informatica CDGC
 
-## SCORING GUIDANCE:
-Score each dimension 0-100. Use the full range — differentiate meaningfully. Base scores on this specific client's requirements.
+## YOUR TASK
+Score each vendor against every criterion:
+- sol: 0=Not Available, 1=Custom Dev Required, 2=Requires Configuration, 3=Out of Box
+- wt: 1=Nice to Have, 2=Desirable, 3=Essential (your judgment based on this client's context)
 
-CRITICAL: Return ONLY a raw JSON object. No markdown, no code fences, no explanation. Response must start with { and end with }. All numeric values must be plain integers — never ranges like 70-80.
+Criteria are mapped to dimensions: dimension scores are auto-computed as sum(sel*sol*wt)/max*100.
+For criteria with client priority=0, set sol=0.
+Differentiate sol scores meaningfully — they directly drive all rankings.
+
+CRITICAL: Return ONLY a raw JSON object. No markdown, no code fences. Start with { end with }.
+All values must be plain integers. Include all 42 criteria in matrix.criteria.
 
 {
-  "scores": {
-    "purview":  { "functional": 78, "technical": 85, "maturity": 72, "cost": 80, "compliance": 76 },
-    "collibra": { "functional": 85, "technical": 68, "maturity": 74, "cost": 60, "compliance": 82 },
-    "alation":  { "functional": 74, "technical": 65, "maturity": 80, "cost": 72, "compliance": 68 },
-    "atlan":    { "functional": 70, "technical": 74, "maturity": 82, "cost": 76, "compliance": 64 },
-    "cdgc":     { "functional": 79, "technical": 76, "maturity": 64, "cost": 56, "compliance": 77 }
-  },
   "rationale": {
-    "purview":  "2-3 sentence fit rationale specific to this client",
+    "purview": "2-3 sentence fit rationale for this specific client",
     "collibra": "2-3 sentence fit rationale",
-    "alation":  "2-3 sentence fit rationale",
-    "atlan":    "2-3 sentence fit rationale",
-    "cdgc":     "2-3 sentence fit rationale"
+    "alation": "2-3 sentence fit rationale",
+    "atlan": "2-3 sentence fit rationale",
+    "cdgc": "2-3 sentence fit rationale"
   },
   "strengths": {
-    "purview":  ["strength 1", "strength 2", "strength 3"],
+    "purview": ["strength 1", "strength 2", "strength 3"],
     "collibra": ["strength 1", "strength 2", "strength 3"],
-    "alation":  ["strength 1", "strength 2", "strength 3"],
-    "atlan":    ["strength 1", "strength 2", "strength 3"],
-    "cdgc":     ["strength 1", "strength 2", "strength 3"]
+    "alation": ["strength 1", "strength 2", "strength 3"],
+    "atlan": ["strength 1", "strength 2", "strength 3"],
+    "cdgc": ["strength 1", "strength 2", "strength 3"]
   },
   "gaps": {
-    "purview":  ["gap 1", "gap 2"],
+    "purview": ["gap 1", "gap 2"],
     "collibra": ["gap 1", "gap 2"],
-    "alation":  ["gap 1", "gap 2"],
-    "atlan":    ["gap 1", "gap 2"],
-    "cdgc":     ["gap 1", "gap 2"]
+    "alation": ["gap 1", "gap 2"],
+    "atlan": ["gap 1", "gap 2"],
+    "cdgc": ["gap 1", "gap 2"]
   },
-  "executiveSummary": "3-4 sentence executive summary naming the top recommended tool and runner-up.",
+  "executiveSummary": "3-4 sentences naming the top tool and runner-up with key reasons.",
   "topPick": "purview",
-  "runnerUp": "collibra"
+  "runnerUp": "collibra",
+  "matrix": {
+    "criteria": [
+      {"id":1,"wt":2,"purview":{"sol":2},"collibra":{"sol":3},"alation":{"sol":2},"atlan":{"sol":2},"cdgc":{"sol":2}},
+      {"id":2,"wt":1,"purview":{"sol":2},"collibra":{"sol":3},"alation":{"sol":2},"atlan":{"sol":3},"cdgc":{"sol":2}}
+    ]
+  }
 }`;
+}
+`;
 }
 
 // ── Option A: Dimension scores derived from criteria (Sel × Sol × Wt rollup) ──
@@ -1161,7 +1166,7 @@ function ResultsScreen({ result, answers }) {
   const matrixCriteria = matrix?.criteria || [];
   const ranked = rankToolsFromCriteria(matrixCriteria, answers);
   const clientName = answers.profile?.client_name || "Client";
-  const topTool = TOOLS.find(t => t.id === topPick) || ranked[0];
+  const topTool = ranked[0]; // always use computed #1, not AI's guess
 
   const handlePrint = () => window.print();
 
@@ -1665,7 +1670,7 @@ async function callAnthropicAPI(prompt, apiKey) {
     headers,
     body: JSON.stringify({
       model: "claude-sonnet-4-20250514",
-      max_tokens: 4000,
+      max_tokens: 8000,
       messages: [{ role: "user", content: prompt }],
     }),
   });
