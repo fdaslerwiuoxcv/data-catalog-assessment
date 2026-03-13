@@ -368,8 +368,6 @@ All values must be plain integers. Include all 42 criteria in matrix.criteria.
   }
 }`;
 }
-`;
-}
 
 // ── Option A: Dimension scores derived from criteria (Sel × Sol × Wt rollup) ──
 
