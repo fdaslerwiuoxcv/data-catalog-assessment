@@ -1222,7 +1222,7 @@ function UnifiedScoreMatrix({ matrixCriteria, answers, ranked }) {
 // ═══════════════════════════════════════════════════════════════════════════════
 
 function ResultsScreen({ result, answers }) {
-  const { rationale, strengths, gaps, executiveSummary, topPick, matrix } = result;
+  const { rationale, strengths, gaps, executiveSummary, matrix } = result;
   const matrixCriteria = matrix?.criteria || [];
   const ranked = rankToolsFromCriteria(matrixCriteria, answers);
   const clientName = answers.profile?.client_name || "Client";
