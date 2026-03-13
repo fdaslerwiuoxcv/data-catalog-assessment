@@ -286,87 +286,31 @@ const getAns = (answers, section, q) => {
 };
 
 function buildPrompt(answers) {
-  const critA = answers.criteria_a || {};
-  const critB = answers.criteria_b || {};
-  const allCritAnswers = { ...critA, ...critB };
-  const criteriaLines = CRITERIA.map(c => {
-    const sel = allCritAnswers[`c${c.id}`] ?? 0;
-    return `[${c.id}] ${c.topic} | ${c.desc.slice(0, 80)}${c.desc.length > 80 ? "…" : ""} | Client Priority: ${sel}/5`;
-  }).join("\n");
+  const allCrit = { ...(answers.criteria_a || {}), ...(answers.criteria_b || {}) };
+  const critList = CRITERIA.map(c => `${c.id}:${c.topic.replace(/,/g,'')}=${allCrit[`c${c.id}`]??0}`).join(",");
 
-  return `You are a senior data governance consultant at NTT DATA evaluating data catalog tool fit.
+  return `You are a senior NTT DATA data governance consultant. Score 5 data catalog tools against 42 client criteria. Return ONLY raw JSON — no markdown, no prose, no code fences.
 
-## CLIENT REQUIREMENTS
+CLIENT: ${getAns(answers,"profile","client_name")} | ${getAns(answers,"profile","industry")} | ${getAns(answers,"profile","org_size")} employees
+DRIVER: ${getAns(answers,"profile","primary_goal")}
+CLOUD: ${getAns(answers,"technical","cloud_platform")} | DEPLOY: ${getAns(answers,"technical","deployment")}
+EXISTING TOOLS: ${getAns(answers,"technical","existing_tools")}
+MATURITY: ${getAns(answers,"maturity","dg_maturity")} | TIMELINE: ${getAns(answers,"maturity","timeline")}
+BUDGET: ${getAns(answers,"cost","budget")} | CONTRACTS: ${getAns(answers,"cost","contracts")}
+COMPLIANCE: ${getAns(answers,"compliance","regulations")} | RESIDENCY: ${getAns(answers,"compliance","data_residency")}
+FUNCTIONAL (1-5): lineage=${getAns(answers,"functional","lineage")} glossary=${getAns(answers,"functional","glossary")} stewardship=${getAns(answers,"functional","stewardship")} discovery=${getAns(answers,"functional","discovery")} dq=${getAns(answers,"functional","dq_integration")} policy=${getAns(answers,"functional","policy_mgmt")}
 
-**Organization:** ${getAns(answers,"profile","client_name")} | Industry: ${getAns(answers,"profile","industry")} | Size: ${getAns(answers,"profile","org_size")} employees
-**Data domains:** ${getAns(answers,"profile","data_domains")} | **Primary driver:** ${getAns(answers,"profile","primary_goal")}
+CRITERIA (id:topic=clientPriority): ${critList}
 
-**Functional Priorities (1=Low, 5=Critical):**
-- Data lineage: ${getAns(answers,"functional","lineage")}/5 | Business glossary: ${getAns(answers,"functional","glossary")}/5
-- Stewardship workflows: ${getAns(answers,"functional","stewardship")}/5 | Discovery & search: ${getAns(answers,"functional","discovery")}/5
-- Data quality: ${getAns(answers,"functional","dq_integration")}/5 | Policy governance: ${getAns(answers,"functional","policy_mgmt")}/5
+TOOLS: purview=MicrosoftPurview collibra=Collibra alation=Alation atlan=Atlan cdgc=InformaticaCDGC
 
-**Technical:** Deployment: ${getAns(answers,"technical","deployment")} | Cloud: ${getAns(answers,"technical","cloud_platform")}
-Existing tools: ${getAns(answers,"technical","existing_tools")} | Data sources: ${getAns(answers,"technical","data_sources")}
+For each criterion score every vendor:
+sol: 0=NotAvailable 1=CustomDev 2=ConfigRequired 3=OutOfBox
+wt: 1=NiceToHave 2=Desirable 3=Essential
+If clientPriority=0 set sol=0. Differentiate sol scores — they drive all dimension rankings.
 
-**Org Maturity:** ${getAns(answers,"maturity","dg_maturity")} | Stewards: ${getAns(answers,"maturity","steward_count")} | Timeline: ${getAns(answers,"maturity","timeline")}
-
-**Cost:** Budget: ${getAns(answers,"cost","budget")} | TCO sensitivity: ${getAns(answers,"cost","tco_sensitivity")}
-Existing contracts: ${getAns(answers,"cost","contracts")}
-
-**Compliance:** ${getAns(answers,"compliance","regulations")} | Audit: ${getAns(answers,"compliance","audit_trail")} | PII: ${getAns(answers,"compliance","pii_classification")}
-
-## CONSULTANT-RATED CRITERIA (42 items)
-Format: [ID] Topic | Description | Client Priority (0=Not Required, 5=Mission Critical)
-${criteriaLines}
-
-## TOOLS
-purview=Microsoft Purview | collibra=Collibra | alation=Alation | atlan=Atlan | cdgc=Informatica CDGC
-
-## YOUR TASK
-Score each vendor against every criterion:
-- sol: 0=Not Available, 1=Custom Dev Required, 2=Requires Configuration, 3=Out of Box
-- wt: 1=Nice to Have, 2=Desirable, 3=Essential (your judgment based on this client's context)
-
-Criteria are mapped to dimensions: dimension scores are auto-computed as sum(sel*sol*wt)/max*100.
-For criteria with client priority=0, set sol=0.
-Differentiate sol scores meaningfully — they directly drive all rankings.
-
-CRITICAL: Return ONLY a raw JSON object. No markdown, no code fences. Start with { end with }.
-All values must be plain integers. Include all 42 criteria in matrix.criteria.
-
-{
-  "rationale": {
-    "purview": "2-3 sentence fit rationale for this specific client",
-    "collibra": "2-3 sentence fit rationale",
-    "alation": "2-3 sentence fit rationale",
-    "atlan": "2-3 sentence fit rationale",
-    "cdgc": "2-3 sentence fit rationale"
-  },
-  "strengths": {
-    "purview": ["strength 1", "strength 2", "strength 3"],
-    "collibra": ["strength 1", "strength 2", "strength 3"],
-    "alation": ["strength 1", "strength 2", "strength 3"],
-    "atlan": ["strength 1", "strength 2", "strength 3"],
-    "cdgc": ["strength 1", "strength 2", "strength 3"]
-  },
-  "gaps": {
-    "purview": ["gap 1", "gap 2"],
-    "collibra": ["gap 1", "gap 2"],
-    "alation": ["gap 1", "gap 2"],
-    "atlan": ["gap 1", "gap 2"],
-    "cdgc": ["gap 1", "gap 2"]
-  },
-  "executiveSummary": "3-4 sentences naming the top tool and runner-up with key reasons.",
-  "topPick": "purview",
-  "runnerUp": "collibra",
-  "matrix": {
-    "criteria": [
-      {"id":1,"wt":2,"purview":{"sol":2},"collibra":{"sol":3},"alation":{"sol":2},"atlan":{"sol":2},"cdgc":{"sol":2}},
-      {"id":2,"wt":1,"purview":{"sol":2},"collibra":{"sol":3},"alation":{"sol":2},"atlan":{"sol":3},"cdgc":{"sol":2}}
-    ]
-  }
-}`;
+Return this exact JSON (all 42 criteria required in matrix.criteria):
+{"rationale":{"purview":"2-3 sentences","collibra":"2-3 sentences","alation":"2-3 sentences","atlan":"2-3 sentences","cdgc":"2-3 sentences"},"strengths":{"purview":["s1","s2","s3"],"collibra":["s1","s2","s3"],"alation":["s1","s2","s3"],"atlan":["s1","s2","s3"],"cdgc":["s1","s2","s3"]},"gaps":{"purview":["g1","g2"],"collibra":["g1","g2"],"alation":["g1","g2"],"atlan":["g1","g2"],"cdgc":["g1","g2"]},"executiveSummary":"3-4 sentences naming top tool and runner-up with key reasons.","topPick":"purview","runnerUp":"collibra","matrix":{"criteria":[{"id":1,"wt":2,"purview":{"sol":2},"collibra":{"sol":3},"alation":{"sol":2},"atlan":{"sol":2},"cdgc":{"sol":2}}]}}`;
 }
 
 // ── Option A: Dimension scores derived from criteria (Sel × Sol × Wt rollup) ──
@@ -1730,7 +1674,7 @@ async function callAnthropicAPI(prompt, apiKey) {
     headers,
     body: JSON.stringify({
       model: "claude-sonnet-4-20250514",
-      max_tokens: 8000,
+      max_tokens: 4000,
       messages: [{ role: "user", content: prompt }],
     }),
   });
