@@ -9,19 +9,23 @@ import {
 // ═══════════════════════════════════════════════════════════════════════════════
 
 const C = {
-  bg: "#F4F6FA",        // Light grey background
-  surface: "#FFFFFF",   // White surface
-  elevated: "#EDF0F7",  // Slightly elevated
-  border: "#D8DEE9",    // Soft border
-  borderMid: "#B8C4D8", // Medium border
-  primary: "#0072BC",   // NTT Future Blue (primary in light mode)
-  primaryDim: "#005A96",// Darker blue
-  accent: "#009AA4",    // Teal accent
-  text: "#0A1628",      // Deep navy text
-  textMuted: "#4A6080", // Muted text
-  textDim: "#8FA3BE",   // Dim text
-  gold: "#B8860B",      // Darker gold for readability on light
-  silver: "#6B7A8D",
+  navy: "#070F26",        // Smart Navy — sidebar/header bg
+  bg: "#F0F4F8",          // Light background
+  surface: "#FFFFFF",     // White surface
+  elevated: "#F1F5F9",    // Slightly elevated
+  border: "#E2E8F0",      // Soft border
+  borderMid: "#CBD5E1",   // Medium border
+  primary: "#0072BC",     // NTT Future Blue
+  primaryDim: "#005A96",  // Darker blue
+  accent: "#009AA4",      // Teal accent
+  text: "#1E293B",        // Body text
+  text2: "#2E404D",       // Text grey
+  textMuted: "#64748B",   // Muted text
+  textDim: "#94A3B8",     // Dim text
+  gold: "#F59E0B",        // Amber (score moderate)
+  scoreGood: "#10B981",   // Green (good score)
+  scoreGap: "#EF4444",    // Red (gap)
+  silver: "#64748B",
   bronze: "#8B5E2A",
 };
 
@@ -368,14 +372,14 @@ const GlobalStyles = () => (
     @import url('${FONT_URL}');
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; }
-    body { background: ${C.bg}; color: ${C.text}; font-family: 'Outfit', sans-serif; -webkit-font-smoothing: antialiased; }
+    body { background: ${C.navy}; color: ${C.text}; font-family: 'Outfit', sans-serif; -webkit-font-smoothing: antialiased; }
     ::-webkit-scrollbar { width: 6px; } ::-webkit-scrollbar-track { background: ${C.surface}; }
     ::-webkit-scrollbar-thumb { background: ${C.border}; border-radius: 3px; }
     ::-webkit-scrollbar-thumb:hover { background: ${C.borderMid}; }
     .fraunces { font-family: 'Fraunces', Georgia, serif; }
     .outfit { font-family: 'Outfit', sans-serif; }
     .mono { font-family: 'JetBrains Mono', monospace; }
-    @keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
     @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.4; } }
     @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
     @keyframes shimmer { from { background-position: -200% center; } to { background-position: 200% center; } }
@@ -386,46 +390,48 @@ const GlobalStyles = () => (
     .fade-up-4 { animation: fadeUp 0.4s 0.20s ease both; }
     .fade-up-5 { animation: fadeUp 0.4s 0.25s ease both; }
     .shimmer-text {
-      background: linear-gradient(90deg, ${C.primary} 0%, ${C.primaryDim} 40%, ${C.accent} 100%);
+      background: linear-gradient(90deg, #ffffff 0%, #7BF7FF 40%, #19A3FC 100%);
       background-size: 200% auto;
       -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-      animation: shimmer 3s linear infinite;
+      animation: shimmer 4s linear infinite;
     }
     .grid-bg {
-      background-image: linear-gradient(rgba(184,196,216,0.5) 1px, transparent 1px), linear-gradient(90deg, rgba(184,196,216,0.5) 1px, transparent 1px);
+      background-image: linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px);
       background-size: 40px 40px;
     }
     .btn-primary {
-      background: ${C.primary}; color: #FFFFFF; border: none; cursor: pointer;
-      font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 0.9rem;
-      padding: 0.75rem 1.75rem; border-radius: 6px; letter-spacing: 0.02em;
+      background: linear-gradient(90deg, ${C.primary}, ${C.accent});
+      color: #FFFFFF; border: none; cursor: pointer;
+      font-family: 'Outfit', sans-serif; font-weight: 600; font-size: 0.88rem;
+      padding: 0.72rem 1.6rem; border-radius: 8px; letter-spacing: 0.02em;
       transition: all 0.2s; display: inline-flex; align-items: center; gap: 0.5rem;
+      box-shadow: 0 2px 8px rgba(0,114,188,0.25);
     }
-    .btn-primary:hover { background: ${C.primaryDim}; transform: translateY(-1px); box-shadow: 0 4px 20px rgba(0,114,188,0.25); }
+    .btn-primary:hover { opacity: 0.92; transform: translateY(-1px); box-shadow: 0 4px 16px rgba(0,114,188,0.3); }
     .btn-primary:active { transform: translateY(0); }
-    .btn-primary:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+    .btn-primary:disabled { opacity: 0.45; cursor: not-allowed; transform: none; box-shadow: none; }
     .btn-ghost {
       background: transparent; color: ${C.textMuted}; border: 1px solid ${C.border}; cursor: pointer;
-      font-family: 'Outfit', sans-serif; font-weight: 500; font-size: 0.9rem;
-      padding: 0.75rem 1.5rem; border-radius: 6px; transition: all 0.2s;
+      font-family: 'Outfit', sans-serif; font-weight: 500; font-size: 0.88rem;
+      padding: 0.72rem 1.5rem; border-radius: 8px; transition: all 0.2s;
     }
     .btn-ghost:hover { border-color: ${C.borderMid}; color: ${C.text}; background: ${C.elevated}; }
-    .card { background: ${C.surface}; border: 1px solid ${C.border}; border-radius: 10px; }
-    .card-elevated { background: ${C.elevated}; border: 1px solid ${C.borderMid}; border-radius: 10px; }
+    .card { background: ${C.surface}; border: 1px solid ${C.border}; border-radius: 12px; box-shadow: 0 1px 4px rgba(0,0,0,0.05); }
+    .card-elevated { background: ${C.elevated}; border: 1px solid ${C.borderMid}; border-radius: 12px; }
     .importance-btn {
-      flex: 1; padding: 0.5rem 0.25rem; border-radius: 5px; border: 1px solid ${C.border};
+      flex: 1; padding: 0.5rem 0.25rem; border-radius: 6px; border: 1px solid ${C.border};
       background: transparent; color: ${C.textMuted}; cursor: pointer; font-family: 'Outfit', sans-serif;
       font-size: 0.72rem; font-weight: 500; text-align: center; transition: all 0.15s;
     }
     .importance-btn:hover { border-color: ${C.borderMid}; color: ${C.text}; }
-    .importance-btn.active { border-color: ${C.primary}; background: rgba(0,114,188,0.08); color: ${C.primary}; font-weight: 600; }
+    .importance-btn.active { border-color: ${C.primary}; background: rgba(0,114,188,0.08); color: ${C.primary}; font-weight: 700; }
     .select-opt {
-      display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem 1rem;
-      border-radius: 7px; border: 1px solid ${C.border}; cursor: pointer;
+      display: flex; align-items: center; gap: 0.75rem; padding: 0.72rem 1rem;
+      border-radius: 8px; border: 1px solid ${C.border}; cursor: pointer;
       transition: all 0.15s; font-size: 0.88rem;
     }
     .select-opt:hover { border-color: ${C.borderMid}; background: ${C.elevated}; }
-    .select-opt.selected { border-color: ${C.primary}; background: rgba(0,114,188,0.06); }
+    .select-opt.selected { border-color: ${C.primary}; background: rgba(0,114,188,0.05); }
     .radio-circle {
       width: 16px; height: 16px; border-radius: 50%; border: 2px solid ${C.borderMid};
       flex-shrink: 0; transition: all 0.15s; display: flex; align-items: center; justify-content: center;
@@ -433,47 +439,143 @@ const GlobalStyles = () => (
     .radio-circle.checked { border-color: ${C.primary}; background: ${C.primary}; }
     .radio-circle.checked::after { content: ''; width: 6px; height: 6px; border-radius: 50%; background: #FFFFFF; }
     .checkbox-box {
-      width: 16px; height: 16px; border-radius: 3px; border: 2px solid ${C.borderMid};
+      width: 16px; height: 16px; border-radius: 4px; border: 2px solid ${C.borderMid};
       flex-shrink: 0; transition: all 0.15s; display: flex; align-items: center; justify-content: center;
     }
     .checkbox-box.checked { border-color: ${C.primary}; background: ${C.primary}; }
     .checkbox-box.checked::after { content: '✓'; color: #FFFFFF; font-size: 10px; font-weight: 700; line-height: 1; }
     input[type="text"] {
-      width: 100%; padding: 0.75rem 1rem; background: ${C.elevated}; border: 1px solid ${C.border};
-      border-radius: 7px; color: ${C.text}; font-family: 'Outfit', sans-serif; font-size: 0.9rem;
+      width: 100%; padding: 0.72rem 1rem; background: ${C.elevated}; border: 1px solid ${C.border};
+      border-radius: 8px; color: ${C.text}; font-family: 'Outfit', sans-serif; font-size: 0.9rem;
       outline: none; transition: border-color 0.2s;
     }
-    input[type="text"]:focus { border-color: ${C.primary}; }
+    input[type="text"]:focus { border-color: ${C.primary}; box-shadow: 0 0 0 3px rgba(0,114,188,0.08); }
     input[type="text"]::placeholder { color: ${C.textDim}; }
     .score-bar-wrap { height: 6px; background: ${C.border}; border-radius: 3px; overflow: hidden; }
     .score-bar { height: 100%; border-radius: 3px; transition: width 1s cubic-bezier(0.4,0,0.2,1); }
     .medal { width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.85rem; font-weight: 700; flex-shrink: 0; }
     .print-btn { display: none; } @media print { .no-print { display: none !important; } .print-btn { display: block; } }
     @media (max-width: 768px) { .hide-mobile { display: none !important; } }
+    /* Sidebar styles */
+    #app-sidebar {
+      width: 230px; flex-shrink: 0; background: ${C.navy};
+      display: flex; flex-direction: column;
+      border-right: 1px solid rgba(255,255,255,0.07);
+      overflow: hidden;
+    }
+    .sb-logo { padding: 20px 20px 16px; border-bottom: 1px solid rgba(255,255,255,0.08); }
+    .sb-client { padding: 14px 20px 12px; border-bottom: 1px solid rgba(255,255,255,0.08); }
+    .sb-client-name { font-weight: 700; font-size: 12px; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .sb-client-role { font-size: 10px; color: rgba(255,255,255,0.4); margin-top: 2px; letter-spacing: 0.03em; }
+    .sb-nav { flex: 1; padding: 10px 0; overflow-y: auto; }
+    .sb-nav-label { font-size: 8px; letter-spacing: 1.8px; color: rgba(255,255,255,0.28); text-transform: uppercase; padding: 8px 20px 4px; font-weight: 600; }
+    .sb-step { display: flex; align-items: center; gap: 10px; padding: 8px 20px; cursor: default; border-left: 2px solid transparent; transition: background 0.2s, border-color 0.2s; }
+    .sb-step.active { background: rgba(0,114,188,0.18); border-left-color: ${C.primary}; }
+    .sb-step.done { border-left-color: ${C.accent}; }
+    .sb-num { width: 18px; height: 18px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 9px; font-weight: 700; flex-shrink: 0; background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.4); }
+    .sb-step.active .sb-num { background: ${C.primary}; color: #fff; }
+    .sb-step.done .sb-num { background: ${C.accent}; color: #fff; }
+    .sb-step-lbl { font-size: 11px; color: rgba(255,255,255,0.42); font-weight: 500; white-space: nowrap; }
+    .sb-step.active .sb-step-lbl { color: #fff; font-weight: 600; }
+    .sb-step.done .sb-step-lbl { color: rgba(255,255,255,0.62); }
+    .sb-footer { padding: 14px 20px; border-top: 1px solid rgba(255,255,255,0.08); }
+    /* Main content area */
+    #app-main { flex: 1; display: flex; flex-direction: column; overflow: hidden; background: ${C.bg}; }
+    #app-scroll { flex: 1; overflow-y: auto; }
+    /* Top bar inside main */
+    .app-topbar {
+      background: ${C.surface}; border-bottom: 1px solid ${C.border};
+      height: 52px; display: flex; align-items: center; padding: 0 24px;
+      justify-content: space-between; position: sticky; top: 0; z-index: 10;
+      flex-shrink: 0; box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+    }
+    .app-topbar-title { font-weight: 700; font-size: 14px; color: ${C.text}; }
+    .app-topbar-sub { font-size: 10px; color: ${C.textMuted}; margin-top: 1px; }
+    /* Progress bar */
+    .app-progress { background: ${C.surface}; border-bottom: 1px solid ${C.border}; padding: 8px 24px; position: sticky; top: 52px; z-index: 9; }
+    .app-ptrack { height: 6px; background: ${C.border}; border-radius: 3px; overflow: hidden; margin-bottom: 6px; }
+    .app-pfill { height: 100%; border-radius: 3px; background: linear-gradient(90deg, ${C.primary}, ${C.accent}); transition: width 0.5s ease; }
   `}</style>
 );
-
 // ═══════════════════════════════════════════════════════════════════════════════
 // HEADER
 // ═══════════════════════════════════════════════════════════════════════════════
 
-function Header({ clientName, onReset }) {
+// Sidebar nav step definitions
+const SIDEBAR_STEPS = [
+  { id: "profile",    label: "Org Profile",    num: 1 },
+  { id: "functional", label: "Functional",     num: 2 },
+  { id: "technical",  label: "Technical Fit",  num: 3 },
+  { id: "maturity",   label: "Maturity",       num: 4 },
+  { id: "cost",       label: "Cost & Licensing",num: 5 },
+  { id: "compliance", label: "Compliance",     num: 6 },
+  { id: "criteria_a", label: "Criteria A",     num: 7 },
+  { id: "criteria_b", label: "Criteria B",     num: 8 },
+];
+
+function Sidebar({ clientName, sectionIdx, screen }) {
+  const showSidebar = screen === "wizard" || screen === "results";
+  if (!showSidebar) return null;
   return (
-    <header style={{ borderBottom: `1px solid ${C.border}`, background: `${C.surface}E0`, backdropFilter: "blur(20px)", position: "sticky", top: 0, zIndex: 100, padding: "0 1.5rem", height: 60, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-      <div style={{ display: "flex", alignItems: "center", gap: "1.25rem" }}>
-        <div style={{ display: "flex", alignItems: "center" }}>
-          <svg viewBox="0 0 1596.7 439.3" style={{ height: 24, width: "auto" }} xmlns="http://www.w3.org/2000/svg">
-            <style>{`.nL2{fill-rule:evenodd;clip-rule:evenodd;fill:#0A1628;}.nL3{fill:#0A1628;}`}</style>
-            <path className="nL2" d="M318.3,85.5c-12.8,0-25.4,2.8-34.3,6.4c-8.9-3.6-21.5-6.4-34.3-6.4c-56.4,0-107.4,53.4-107.4,126.6c0,79.8,65.2,141.6,141.7,141.6c76.5,0,141.7-61.7,141.7-141.6C425.7,138.9,374.7,85.5,318.3,85.5L318.3,85.5z M284,129c10.9,6.5,25.2,25.2,25.2,46.4c0,15.5-10.2,27.7-25.2,27.7c-15,0-25.2-12.2-25.2-27.7C258.7,154.2,273.1,135.5,284,129L284,129z M284,318.8c-58.5,0-106.9-47.1-106.9-107.4c0-55.1,39.8-92.7,71-91.3c-14.8,14.7-23.8,36.2-23.8,57c0,35.8,28.4,60.9,59.7,60.9c31.3,0,59.7-25.1,59.7-60.9c0-20.8-9-42.3-23.8-57c31.2-1.4,71,36.2,71,91.3C390.9,271.8,342.5,318.8,284,318.8z"/>
-            <path className="nL3" d="M629.8,146.6v29.2c0,0,41.3,0,44.5,0c0,3.2,0,109.5,0,109.5h31.5c0,0,0-106.2,0-109.5c3.1,0,44.5,0,44.5,0v-29.2H629.8z"/>
-            <path className="nL3" d="M1148.1,146.6h-79.3V176h77.2c11.3,0,15.7,5.2,15.7,18.4c0,0.1,0,3.8,0,4.9c-3.2,0-64,0-64,0c-24.3,0-36.4,12.2-36.4,39.7v6.5c0,28.3,12.5,39.6,37.8,39.6h93.8v-91.1C1193,159.2,1181.4,146.6,1148.1,146.6z M1102.4,255.6c-4.8,0-10.1-2.4-10.1-14.3c0-11.9,5.3-14,10.1-14c0,0,56.2,0,59.4,0v28.3C1158.6,255.6,1102.4,255.6,1102.4,255.6z"/>
-            <path className="nL3" d="M1409.6,146.6h-79.3V176h77.2c11.3,0,15.7,5.2,15.7,18.4c0,0.1,0,3.8,0,4.9c-3.2,0-64,0-64,0c-24.3,0-36.4,12.2-36.4,39.7v6.5c0,28.3,12.5,39.6,37.8,39.6h93.8v-91.1C1454.4,159.2,1442.9,146.6,1409.6,146.6z M1363.9,255.6c-4.8,0-10.1-2.4-10.1-14.3c0-11.9,5.3-14,10.1-14c0,0,56.2,0,59.4,0v28.3C1420.1,255.6,1363.9,255.6,1363.9,255.6z"/>
-            <path className="nL3" d="M760.2,146.6v29.2c0,0,41.4,0,44.5,0c0,3.2,0,109.5,0,109.5h31.5c0,0,0-106.2,0-109.5c3.1,0,44.5,0,44.5,0v-29.2H760.2z"/>
-            <path className="nL3" d="M1199.3,146.6v29.2c0,0,41.3,0,44.5,0c0,3.2,0,109.5,0,109.5h31.5c0,0,0-106.2,0-109.5c3.1,0,44.5,0,44.5,0v-29.2H1199.3z"/>
-            <path className="nL3" d="M1049.2,236.7v-41.5c0-36.3-14.1-48.6-45.9-48.6H919v138.6h85.8C1038.5,285.2,1049.2,268.5,1049.2,236.7z M1017,237.3c0,13.3-4.5,18.4-15.8,18.4c0,0-47.6,0-50.7,0v-79.6c3.1,0,50.7,0,50.7,0c11.3,0,15.8,5.2,15.8,18.4C1017,194.7,1017,237.3,1017,237.3z"/>
-            <path className="nL3" d="M585.4,252.2c-0.7-1.3-42.8-83.3-47.9-91.3c-5.9-9.3-13.2-15.8-27-15.8c-12.9,0-28.1,5.7-28.1,36.6v103.7h31.1c0,0,0-80.2,0-86.5c0-6.2-0.4-15.4-0.5-17.2c-0.1-1.5,0-3,0.8-3.4c0.9-0.5,1.8,0.3,2.4,1.5c0.6,1.2,39.6,78.3,47.9,91.3c5.9,9.3,13.2,15.8,27,15.8c12.8,0,28.1-5.7,28.1-36.6V146.6h-31c0,0,0,80.2,0,86.5c0,6.2,0.4,15.4,0.5,17.3c0.1,1.5,0,3-0.8,3.4C586.9,254.2,586,253.4,585.4,252.2z"/>
-          </svg>
+    <div id="app-sidebar">
+      <div className="sb-logo">
+        <svg width="72" height="18" viewBox="0 0 120 28" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M0 0h8l12 18V0h8v28h-8L8 10v18H0V0z" fill="white"/><path d="M36 0h24v7h-8v21h-8V7h-8V0z" fill="white"/><path d="M64 0h24v7h-8v21h-8V7h-8V0z" fill="white"/><path d="M92 0h28v28h-8V7h-4v21h-8V7h-4v21h-4V0z" fill="white"/></svg>
+      </div>
+      {clientName && (
+        <div className="sb-client">
+          <div className="sb-client-name">{clientName}</div>
+          <div className="sb-client-role">Data Catalog Evaluation</div>
         </div>
+      )}
+      <nav className="sb-nav">
+        <div className="sb-nav-label">Assessment</div>
+        {SIDEBAR_STEPS.map((step, i) => {
+          const isActive = screen === "wizard" && sectionIdx === i;
+          const isDone   = screen === "results" || (screen === "wizard" && sectionIdx > i);
+          return (
+            <div key={step.id} className={`sb-step ${isActive ? "active" : ""} ${isDone && !isActive ? "done" : ""}`}>
+              <div className="sb-num">{step.num}</div>
+              <span className="sb-step-lbl">{step.label}</span>
+            </div>
+          );
+        })}
+        {screen === "results" && (
+          <>
+            <div className="sb-nav-label" style={{ marginTop: 6 }}>Output</div>
+            <div className="sb-step done">
+              <div className="sb-num">✓</div>
+              <span className="sb-step-lbl">Results</span>
+            </div>
+          </>
+        )}
+      </nav>
+      <div className="sb-footer">
+        <div style={{ fontSize: 9, color: "rgba(255,255,255,0.28)", letterSpacing: "1.5px", textTransform: "uppercase", marginBottom: 6 }}>NTT DATA</div>
+        <div style={{ fontSize: 9, color: "rgba(255,255,255,0.28)" }}>Data Governance Practice</div>
+      </div>
+    </div>
+  );
+}
+
+function Header({ clientName, onReset, screen }) {
+  // Minimal top bar — only shown on intro/loading/error/apikey screens
+  // Wizard and results use the sidebar + per-section topbar
+  const showHeader = !["wizard","results"].includes(screen);
+  if (!showHeader) return null;
+  return (
+    <header style={{ borderBottom: `1px solid ${C.border}`, background: C.surface, position: "sticky", top: 0, zIndex: 100, padding: "0 1.5rem", height: 56, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+      <div style={{ display: "flex", alignItems: "center", gap: "1.25rem" }}>
+        <svg viewBox="0 0 1596.7 439.3" style={{ height: 22, width: "auto" }} xmlns="http://www.w3.org/2000/svg">
+          <style>{`.nL2{fill-rule:evenodd;clip-rule:evenodd;fill:${C.navy};} .nL3{fill:${C.navy};}`}</style>
+          <path className="nL2" d="M318.3,85.5c-12.8,0-25.4,2.8-34.3,6.4c-8.9-3.6-21.5-6.4-34.3-6.4c-56.4,0-107.4,53.4-107.4,126.6c0,79.8,65.2,141.6,141.7,141.6c76.5,0,141.7-61.7,141.7-141.6C425.7,138.9,374.7,85.5,318.3,85.5L318.3,85.5z M284,129c10.9,6.5,25.2,25.2,25.2,46.4c0,15.5-10.2,27.7-25.2,27.7c-15,0-25.2-12.2-25.2-27.7C258.7,154.2,273.1,135.5,284,129L284,129z M284,318.8c-58.5,0-106.9-47.1-106.9-107.4c0-55.1,39.8-92.7,71-91.3c-14.8,14.7-23.8,36.2-23.8,57c0,35.8,28.4,60.9,59.7,60.9c31.3,0,59.7-25.1,59.7-60.9c0-20.8-9-42.3-23.8-57c31.2-1.4,71,36.2,71,91.3C390.9,271.8,342.5,318.8,284,318.8z"/>
+          <path className="nL3" d="M629.8,146.6v29.2c0,0,41.3,0,44.5,0c0,3.2,0,109.5,0,109.5h31.5c0,0,0-106.2,0-109.5c3.1,0,44.5,0,44.5,0v-29.2H629.8z"/>
+          <path className="nL3" d="M1148.1,146.6h-79.3V176h77.2c11.3,0,15.7,5.2,15.7,18.4c0,0.1,0,3.8,0,4.9c-3.2,0-64,0-64,0c-24.3,0-36.4,12.2-36.4,39.7v6.5c0,28.3,12.5,39.6,37.8,39.6h93.8v-91.1C1193,159.2,1181.4,146.6,1148.1,146.6z M1102.4,255.6c-4.8,0-10.1-2.4-10.1-14.3c0-11.9,5.3-14,10.1-14c0,0,56.2,0,59.4,0v28.3C1158.6,255.6,1102.4,255.6,1102.4,255.6z"/>
+          <path className="nL3" d="M1409.6,146.6h-79.3V176h77.2c11.3,0,15.7,5.2,15.7,18.4c0,0.1,0,3.8,0,4.9c-3.2,0-64,0-64,0c-24.3,0-36.4,12.2-36.4,39.7v6.5c0,28.3,12.5,39.6,37.8,39.6h93.8v-91.1C1454.4,159.2,1442.9,146.6,1409.6,146.6z M1363.9,255.6c-4.8,0-10.1-2.4-10.1-14.3c0-11.9,5.3-14,10.1-14c0,0,56.2,0,59.4,0v28.3C1420.1,255.6,1363.9,255.6,1363.9,255.6z"/>
+          <path className="nL3" d="M760.2,146.6v29.2c0,0,41.4,0,44.5,0c0,3.2,0,109.5,0,109.5h31.5c0,0,0-106.2,0-109.5c3.1,0,44.5,0,44.5,0v-29.2H760.2z"/>
+          <path className="nL3" d="M1199.3,146.6v29.2c0,0,41.3,0,44.5,0c0,3.2,0,109.5,0,109.5h31.5c0,0,0-106.2,0-109.5c3.1,0,44.5,0,44.5,0v-29.2H1199.3z"/>
+          <path className="nL3" d="M1049.2,236.7v-41.5c0-36.3-14.1-48.6-45.9-48.6H919v138.6h85.8C1038.5,285.2,1049.2,268.5,1049.2,236.7z M1017,237.3c0,13.3-4.5,18.4-15.8,18.4c0,0-47.6,0-50.7,0v-79.6c3.1,0,50.7,0,50.7,0c11.3,0,15.8,5.2,15.8,18.4C1017,194.7,1017,237.3,1017,237.3z"/>
+          <path className="nL3" d="M585.4,252.2c-0.7-1.3-42.8-83.3-47.9-91.3c-5.9-9.3-13.2-15.8-27-15.8c-12.9,0-28.1,5.7-28.1,36.6v103.7h31.1c0,0,0-80.2,0-86.5c0-6.2-0.4-15.4-0.5-17.2c-0.1-1.5,0-3,0.8-3.4c0.9-0.5,1.8,0.3,2.4,1.5c0.6,1.2,39.6,78.3,47.9,91.3c5.9,9.3,13.2,15.8,27,15.8c12.8,0,28.1-5.7,28.1-36.6V146.6h-31c0,0,0,80.2,0,86.5c0,6.2,0.4,15.4,0.5,17.3c0.1,1.5,0,3-0.8,3.4C586.9,254.2,586,253.4,585.4,252.2z"/>
+        </svg>
         <div style={{ width: 1, height: 20, background: C.border }} />
         <span className="outfit" style={{ fontWeight: 600, fontSize: "0.9rem", color: C.text }}>AI-Enabled Data Catalog Evaluation</span>
       </div>
@@ -491,18 +593,18 @@ function Header({ clientName, onReset }) {
 
 function IntroScreen({ onStart }) {
   return (
-    <div style={{ minHeight: "calc(100vh - 60px)", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "3rem 1.5rem", position: "relative", overflow: "hidden" }}>
-      <div className="grid-bg" style={{ position: "absolute", inset: 0, opacity: 0.3 }} />
-      <div style={{ position: "absolute", top: "20%", left: "50%", transform: "translateX(-50%)", width: 600, height: 600, background: `radial-gradient(circle, rgba(0,114,188,0.06) 0%, transparent 70%)`, pointerEvents: "none" }} />
+    <div style={{ minHeight: "100vh", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "3rem 1.5rem", position: "relative", overflow: "hidden", background: C.navy }}>
+      <div className="grid-bg" style={{ position: "absolute", inset: 0 }} />
+      <div style={{ position: "absolute", top: "20%", left: "50%", transform: "translateX(-50%)", width: 600, height: 600, background: `radial-gradient(circle, rgba(0,114,188,0.1) 0%, transparent 70%)`, pointerEvents: "none" }} />
       <div style={{ position: "relative", maxWidth: 680, width: "100%", textAlign: "center" }}>
-        <div className="fade-up" style={{ display: "inline-flex", alignItems: "center", gap: "0.5rem", background: C.elevated, border: `1px solid ${C.borderMid}`, borderRadius: 20, padding: "0.35rem 1rem", marginBottom: "2rem" }}>
-          <span style={{ width: 7, height: 7, borderRadius: "50%", background: C.primary, display: "inline-block" }} />
-          <span className="mono" style={{ fontSize: "0.75rem", color: C.primary, letterSpacing: "0.1em" }}>AI-POWERED TOOL EVALUATION</span>
+        <div className="fade-up" style={{ display: "inline-flex", alignItems: "center", gap: "0.5rem", background: "rgba(255,255,255,0.07)", border: "1px solid rgba(255,255,255,0.15)", borderRadius: 20, padding: "0.35rem 1rem", marginBottom: "2rem" }}>
+          <span style={{ width: 7, height: 7, borderRadius: "50%", background: C.accent, display: "inline-block" }} />
+          <span className="mono" style={{ fontSize: "0.75rem", color: "rgba(255,255,255,0.8)", letterSpacing: "0.1em" }}>AI-POWERED TOOL EVALUATION</span>
         </div>
         <h1 className="fraunces shimmer-text fade-up-1" style={{ fontSize: "clamp(2.4rem, 6vw, 3.5rem)", fontWeight: 700, lineHeight: 1.08, marginBottom: "1.25rem" }}>
           AI-Enabled Data Catalog<br />Evaluation
         </h1>
-        <p className="fade-up-2" style={{ fontSize: "1.05rem", color: C.textMuted, lineHeight: 1.7, marginBottom: "2.5rem", maxWidth: 520, margin: "0 auto 2.5rem" }}>
+        <p className="fade-up-2" style={{ fontSize: "1.05rem", color: "rgba(255,255,255,0.58)", lineHeight: 1.7, marginBottom: "2.5rem", maxWidth: 520, margin: "0 auto 2.5rem" }}>
           A structured evaluation framework that compares leading enterprise data catalog platforms against your client's specific requirements, maturity level, and business goals.
         </p>
         <div className="fade-up-3" style={{ display: "flex", gap: "0.75rem", justifyContent: "center", flexWrap: "wrap", marginBottom: "3rem" }}>
@@ -518,10 +620,10 @@ function IntroScreen({ onStart }) {
             { icon: "⬡", title: "AI-Powered", desc: "Claude generates nuanced, context-aware scores" },
             { icon: "△", title: "Full Report", desc: "Rankings, radar chart, matrix & narrative output" },
           ].map((f, i) => (
-            <div key={i} className="card" style={{ padding: "1.25rem", textAlign: "left" }}>
-              <div className="fraunces" style={{ color: C.primary, fontSize: "1.1rem", marginBottom: "0.5rem" }}>{f.icon}</div>
-              <div style={{ fontWeight: 700, fontSize: "0.9rem", marginBottom: "0.25rem" }}>{f.title}</div>
-              <div style={{ fontSize: "0.8rem", color: C.textMuted, lineHeight: 1.5 }}>{f.desc}</div>
+            <div key={i} style={{ background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.12)", borderRadius: 12, padding: "1.25rem", textAlign: "left" }}>
+              <div className="fraunces" style={{ color: C.accent, fontSize: "1.1rem", marginBottom: "0.5rem" }}>{f.icon}</div>
+              <div style={{ fontWeight: 700, fontSize: "0.9rem", marginBottom: "0.25rem", color: "#fff" }}>{f.title}</div>
+              <div style={{ fontSize: "0.8rem", color: "rgba(255,255,255,0.48)", lineHeight: 1.5 }}>{f.desc}</div>
             </div>
           ))}
         </div>
@@ -530,7 +632,7 @@ function IntroScreen({ onStart }) {
             Begin Assessment →
           </button>
         </div>
-        <p style={{ marginTop: "1.5rem", fontSize: "0.78rem", color: C.textDim }}>
+        <p style={{ marginTop: "1.5rem", fontSize: "0.78rem", color: "rgba(255,255,255,0.3)" }}>
           ~10 minutes · 6 sections · Powered by Claude Sonnet 4
         </p>
       </div>
@@ -542,29 +644,37 @@ function IntroScreen({ onStart }) {
 // PROGRESS BAR
 // ═══════════════════════════════════════════════════════════════════════════════
 
-function ProgressBar({ current, total }) {
-  const pct = Math.round(((current) / total) * 100);
+function ProgressBar({ current, total, section }) {
+  const pct = Math.round((current / total) * 100);
   return (
-    <div className="no-print" style={{ background: C.surface, borderBottom: `1px solid ${C.border}`, padding: "0.75rem 1.5rem" }}>
-      <div style={{ maxWidth: 860, margin: "0 auto", display: "flex", alignItems: "center", gap: "1rem" }}>
-        <div style={{ flex: 1, height: 3, background: C.border, borderRadius: 2, overflow: "hidden" }}>
-          <div style={{ height: "100%", width: `${pct}%`, background: C.primary, borderRadius: 2, transition: "width 0.5s ease" }} />
-        </div>
-        <span className="mono" style={{ fontSize: "0.75rem", color: C.textMuted, flexShrink: 0 }}>
-          {current} / {total}
-        </span>
-      </div>
-      <div style={{ maxWidth: 860, margin: "0.6rem auto 0", display: "flex", gap: "0.5rem" }}>
-        {SECTIONS.map((s, i) => (
-          <div key={s.id} style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", gap: "0.25rem" }}>
-            <div style={{ width: "100%", height: 2, borderRadius: 1, background: i < current ? C.primary : i === current - 1 ? C.primaryDim : C.border, transition: "background 0.3s" }} />
-            <span className="hide-mobile" style={{ fontSize: "0.65rem", color: i < current ? C.primary : C.textDim, fontWeight: i === current - 1 ? 600 : 400, transition: "color 0.3s", whiteSpace: "nowrap" }}>
-              {s.title.split(" ")[0]}
-            </span>
+    <>
+      {/* Per-section topbar */}
+      <div className="app-topbar no-print">
+        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+          <span style={{ fontSize: 17, color: C.primary }}>{section?.icon}</span>
+          <div>
+            <div className="app-topbar-title">{section?.title}</div>
+            <div className="app-topbar-sub">{section?.subtitle}</div>
           </div>
-        ))}
+        </div>
+        {section?.dim && (
+          <span style={{ fontSize: "0.75rem", color: C.textMuted, background: C.elevated, padding: "4px 12px", borderRadius: 20, border: `1px solid ${C.border}`, fontWeight: 600 }}>
+            {Math.round(DIMENSIONS.find(d => d.id === section.dim)?.weight * 100)}% weight
+          </span>
+        )}
       </div>
-    </div>
+      {/* Progress strip */}
+      <div className="app-progress no-print">
+        <div className="app-ptrack">
+          <div className="app-pfill" style={{ width: `${pct}%` }} />
+        </div>
+        <div style={{ display: "flex", gap: 3 }}>
+          {SECTIONS.map((s, i) => (
+            <div key={s.id} style={{ flex: 1, height: 3, borderRadius: 2, background: i < current ? C.accent : i === current - 1 ? C.primary : C.border, transition: "background 0.3s" }} />
+          ))}
+        </div>
+      </div>
+    </>
   );
 }
 
@@ -767,18 +877,18 @@ function LoadingScreen() {
     return () => clearInterval(interval);
   }, [stepsLen]);
   return (
-    <div style={{ minHeight: "calc(100vh - 60px)", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: "2rem" }}>
+    <div style={{ minHeight: "100vh", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: "2rem", background: C.navy }}>
       <div style={{ position: "relative", width: 64, height: 64 }}>
-        <div style={{ position: "absolute", inset: 0, border: `2px solid ${C.border}`, borderTopColor: C.primary, borderRadius: "50%", animation: "spin 1s linear infinite" }} />
-        <div style={{ position: "absolute", inset: 8, border: `2px solid ${C.border}`, borderBottomColor: C.primaryDim, borderRadius: "50%", animation: "spin 1.5s linear infinite reverse" }} />
+        <div style={{ position: "absolute", inset: 0, border: "2px solid rgba(255,255,255,0.1)", borderTopColor: C.primary, borderRadius: "50%", animation: "spin 1s linear infinite" }} />
+        <div style={{ position: "absolute", inset: 8, border: "2px solid rgba(255,255,255,0.1)", borderBottomColor: C.accent, borderRadius: "50%", animation: "spin 1.5s linear infinite reverse" }} />
       </div>
       <div style={{ textAlign: "center" }}>
-        <div className="fraunces" style={{ fontSize: "1.25rem", fontWeight: 700, marginBottom: "0.5rem" }}>Evaluating Tool Fit</div>
-        <div className="mono" style={{ fontSize: "0.82rem", color: C.primary, height: "1.2rem", transition: "opacity 0.3s" }}>{steps[step]}</div>
+        <div className="fraunces" style={{ fontSize: "1.25rem", fontWeight: 700, marginBottom: "0.5rem", color: "#fff" }}>Evaluating Tool Fit</div>
+        <div className="mono" style={{ fontSize: "0.82rem", color: C.accent, height: "1.2rem", transition: "opacity 0.3s" }}>{steps[step]}</div>
       </div>
       <div style={{ display: "flex", gap: "0.5rem", marginTop: "0.5rem" }}>
         {steps.map((_, i) => (
-          <div key={i} style={{ width: 6, height: 6, borderRadius: "50%", background: i === step ? C.primary : C.border, transition: "background 0.3s" }} />
+          <div key={i} style={{ width: 6, height: 6, borderRadius: "50%", background: i === step ? C.primary : "rgba(255,255,255,0.15)", transition: "background 0.3s" }} />
         ))}
       </div>
     </div>
@@ -1393,8 +1503,8 @@ function MatrixScreen({ result, answers, apiKey, onBack }) {
   if (loading) return (
     <div style={{ minHeight: "calc(100vh - 60px)", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: "1.5rem" }}>
       <div style={{ position: "relative", width: 64, height: 64 }}>
-        <div style={{ position: "absolute", inset: 0, border: `2px solid ${C.border}`, borderTopColor: C.primary, borderRadius: "50%", animation: "spin 1s linear infinite" }} />
-        <div style={{ position: "absolute", inset: 10, border: `2px solid ${C.border}`, borderBottomColor: C.primaryDim, borderRadius: "50%", animation: "spin 1.5s linear infinite reverse" }} />
+        <div style={{ position: "absolute", inset: 0, border: "2px solid rgba(255,255,255,0.1)", borderTopColor: C.primary, borderRadius: "50%", animation: "spin 1s linear infinite" }} />
+        <div style={{ position: "absolute", inset: 10, border: "2px solid rgba(255,255,255,0.1)", borderBottomColor: C.accent, borderRadius: "50%", animation: "spin 1.5s linear infinite reverse" }} />
       </div>
       <div>
         <div className="fraunces" style={{ fontSize: "1.1rem", fontWeight: 700, textAlign: "center", marginBottom: "0.5rem" }}>Generating Scoring Matrix</div>
@@ -1763,38 +1873,70 @@ export default function App() {
   };
 
 
+  const showSidebar = screen === "wizard" || screen === "results";
+
   return (
     <>
       <GlobalStyles />
-      <div style={{ minHeight: "100vh", background: C.bg }}>
-        <Header
-          clientName={screen === "results" ? clientName : ""}
-          onReset={screen !== "intro" ? handleReset : null}
-        />
-        {screen === "intro" && <IntroScreen onStart={handleStart} />}
-        {screen === "apikey" && <ApiKeyGate onConfirm={handleApiKey} />}
-        {screen === "wizard" && (
-          <>
-            <ProgressBar current={sectionIdx + 1} total={SECTIONS.length} />
-            <SectionForm
-              section={SECTIONS[sectionIdx]}
-              sectionIndex={sectionIdx}
-              answers={answers}
-              setAnswers={setAnswers}
-              onNext={handleNext}
-              onBack={handleBack}
-            />
-          </>
-        )}
-        {screen === "loading" && <LoadingScreen />}
-        {screen === "results" && result && <ResultsScreen result={result} answers={answers} />}
-        {screen === "error" && (
-          <div style={{ maxWidth: 500, margin: "4rem auto", padding: "2rem", textAlign: "center" }}>
-            <div className="fraunces" style={{ fontSize: "1.1rem", fontWeight: 700, color: C.accent, marginBottom: "0.75rem" }}>Assessment Error</div>
-            <p style={{ color: C.textMuted, marginBottom: "1.5rem", fontSize: "0.88rem" }}>{error}</p>
-            <button className="btn-primary" onClick={() => setScreen("wizard")}>← Try Again</button>
+      <div style={{ height: "100vh", display: "flex", flexDirection: "row", overflow: "hidden" }}>
+        {/* Sidebar — only on wizard and results */}
+        <Sidebar clientName={clientName} sectionIdx={sectionIdx} screen={screen} />
+
+        {/* Main content column */}
+        <div id="app-main">
+          {/* Top header — only on non-wizard/results screens */}
+          <Header
+            clientName={screen === "results" ? clientName : ""}
+            onReset={screen !== "intro" ? handleReset : null}
+            screen={screen}
+          />
+
+          {/* Scrollable content area */}
+          <div id="app-scroll">
+            {screen === "intro"   && <IntroScreen onStart={handleStart} />}
+            {screen === "apikey"  && <ApiKeyGate onConfirm={handleApiKey} />}
+            {screen === "wizard"  && (
+              <>
+                <ProgressBar
+                  current={sectionIdx + 1}
+                  total={SECTIONS.length}
+                  section={SECTIONS[sectionIdx]}
+                />
+                <SectionForm
+                  section={SECTIONS[sectionIdx]}
+                  sectionIndex={sectionIdx}
+                  answers={answers}
+                  setAnswers={setAnswers}
+                  onNext={handleNext}
+                  onBack={handleBack}
+                />
+              </>
+            )}
+            {screen === "loading" && <LoadingScreen />}
+            {screen === "results" && result && (
+              <>
+                <div className="app-topbar no-print">
+                  <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                    <span style={{ fontSize: 16, color: C.primary }}>▶</span>
+                    <div>
+                      <div className="app-topbar-title">Tool Fit Results</div>
+                      <div className="app-topbar-sub">{clientName} · NTT DATA Data Governance Practice</div>
+                    </div>
+                  </div>
+                  <button onClick={handleReset} className="btn-ghost" style={{ fontSize: "0.8rem", padding: "0.4rem 0.9rem" }}>↩ Restart</button>
+                </div>
+                <ResultsScreen result={result} answers={answers} />
+              </>
+            )}
+            {screen === "error"   && (
+              <div style={{ maxWidth: 500, margin: "4rem auto", padding: "2rem", textAlign: "center" }}>
+                <div className="fraunces" style={{ fontSize: "1.1rem", fontWeight: 700, color: C.accent, marginBottom: "0.75rem" }}>Assessment Error</div>
+                <p style={{ color: C.textMuted, marginBottom: "1.5rem", fontSize: "0.88rem" }}>{error}</p>
+                <button className="btn-primary" onClick={() => setScreen("wizard")}>← Try Again</button>
+              </div>
+            )}
           </div>
-        )}
+        </div>
       </div>
     </>
   );
