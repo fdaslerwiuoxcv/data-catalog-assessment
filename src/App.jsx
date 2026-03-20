@@ -1873,8 +1873,6 @@ export default function App() {
   };
 
 
-  const showSidebar = screen === "wizard" || screen === "results";
-
   return (
     <>
       <GlobalStyles />
