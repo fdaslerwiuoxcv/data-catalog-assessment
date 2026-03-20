@@ -470,6 +470,8 @@ const GlobalStyles = () => (
     .sb-nav { flex: 1; padding: 10px 0; overflow-y: auto; }
     .sb-nav-label { font-size: 8px; letter-spacing: 1.8px; color: rgba(255,255,255,0.28); text-transform: uppercase; padding: 8px 20px 4px; font-weight: 600; }
     .sb-step { display: flex; align-items: center; gap: 10px; padding: 8px 20px; cursor: default; border-left: 2px solid transparent; transition: background 0.2s, border-color 0.2s; }
+    .sb-step.clickable { cursor: pointer; }
+    .sb-step.clickable:hover { background: rgba(255,255,255,0.06); }
     .sb-step.active { background: rgba(0,114,188,0.18); border-left-color: ${C.primary}; }
     .sb-step.done { border-left-color: ${C.accent}; }
     .sb-num { width: 18px; height: 18px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 9px; font-weight: 700; flex-shrink: 0; background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.4); }
@@ -513,7 +515,7 @@ const SIDEBAR_STEPS = [
   { id: "criteria_b", label: "Criteria B",     num: 8 },
 ];
 
-function Sidebar({ clientName, sectionIdx, screen }) {
+function Sidebar({ clientName, sectionIdx, screen, onNavigate }) {
   const showSidebar = screen === "wizard" || screen === "results";
   if (!showSidebar) return null;
   return (
@@ -540,10 +542,16 @@ function Sidebar({ clientName, sectionIdx, screen }) {
       <nav className="sb-nav">
         <div className="sb-nav-label">Assessment</div>
         {SIDEBAR_STEPS.map((step, i) => {
-          const isActive = screen === "wizard" && sectionIdx === i;
-          const isDone   = screen === "results" || (screen === "wizard" && sectionIdx > i);
+          const isActive    = screen === "wizard" && sectionIdx === i;
+          const isDone      = screen === "results" || (screen === "wizard" && sectionIdx > i);
+          const isClickable = !isActive && (isDone || screen === "wizard");
           return (
-            <div key={step.id} className={`sb-step ${isActive ? "active" : ""} ${isDone && !isActive ? "done" : ""}`}>
+            <div
+              key={step.id}
+              className={`sb-step ${isActive ? "active" : ""} ${isDone && !isActive ? "done" : ""} ${isClickable ? "clickable" : ""}`}
+              onClick={isClickable ? () => onNavigate(i) : undefined}
+              title={isClickable ? `Go to ${step.label}` : undefined}
+            >
               <div className="sb-num">{step.num}</div>
               <span className="sb-step-lbl">{step.label}</span>
             </div>
@@ -1895,13 +1903,18 @@ export default function App() {
     setScreen("intro"); setSectionIdx(0); setAnswers({}); setResult(null); setError(null);
   };
 
+  const handleNavigate = (idx) => {
+    setSectionIdx(idx);
+    setScreen("wizard");
+  };
+
 
   return (
     <>
       <GlobalStyles />
       <div style={{ height: "100vh", display: "flex", flexDirection: "row", overflow: "hidden" }}>
         {/* Sidebar — only on wizard and results */}
-        <Sidebar clientName={clientName} sectionIdx={sectionIdx} screen={screen} />
+        <Sidebar clientName={clientName} sectionIdx={sectionIdx} screen={screen} onNavigate={handleNavigate} />
 
         {/* Main content column */}
         <div id="app-main">
