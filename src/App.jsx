@@ -607,11 +607,24 @@ function IntroScreen({ onStart }) {
       <div className="grid-bg" style={{ position: "absolute", inset: 0 }} />
       <div style={{ position: "absolute", top: "20%", left: "50%", transform: "translateX(-50%)", width: 600, height: 600, background: `radial-gradient(circle, rgba(0,114,188,0.1) 0%, transparent 70%)`, pointerEvents: "none" }} />
       <div style={{ position: "relative", maxWidth: 680, width: "100%", textAlign: "center" }}>
+        <div className="fade-up" style={{ marginBottom: "2.5rem" }}>
+          <svg viewBox="0 0 1596.7 439.3" style={{ height: 26, width: "auto" }} xmlns="http://www.w3.org/2000/svg">
+            <style>{`.iL2{fill-rule:evenodd;clip-rule:evenodd;fill:#ffffff;} .iL3{fill:#ffffff;}`}</style>
+            <path className="iL2" d="M318.3,85.5c-12.8,0-25.4,2.8-34.3,6.4c-8.9-3.6-21.5-6.4-34.3-6.4c-56.4,0-107.4,53.4-107.4,126.6c0,79.8,65.2,141.6,141.7,141.6c76.5,0,141.7-61.7,141.7-141.6C425.7,138.9,374.7,85.5,318.3,85.5L318.3,85.5z M284,129c10.9,6.5,25.2,25.2,25.2,46.4c0,15.5-10.2,27.7-25.2,27.7c-15,0-25.2-12.2-25.2-27.7C258.7,154.2,273.1,135.5,284,129L284,129z M284,318.8c-58.5,0-106.9-47.1-106.9-107.4c0-55.1,39.8-92.7,71-91.3c-14.8,14.7-23.8,36.2-23.8,57c0,35.8,28.4,60.9,59.7,60.9c31.3,0,59.7-25.1,59.7-60.9c0-20.8-9-42.3-23.8-57c31.2-1.4,71,36.2,71,91.3C390.9,271.8,342.5,318.8,284,318.8z"/>
+            <path className="iL3" d="M629.8,146.6v29.2c0,0,41.3,0,44.5,0c0,3.2,0,109.5,0,109.5h31.5c0,0,0-106.2,0-109.5c3.1,0,44.5,0,44.5,0v-29.2H629.8z"/>
+            <path className="iL3" d="M1148.1,146.6h-79.3V176h77.2c11.3,0,15.7,5.2,15.7,18.4c0,0.1,0,3.8,0,4.9c-3.2,0-64,0-64,0c-24.3,0-36.4,12.2-36.4,39.7v6.5c0,28.3,12.5,39.6,37.8,39.6h93.8v-91.1C1193,159.2,1181.4,146.6,1148.1,146.6z M1102.4,255.6c-4.8,0-10.1-2.4-10.1-14.3c0-11.9,5.3-14,10.1-14c0,0,56.2,0,59.4,0v28.3C1158.6,255.6,1102.4,255.6,1102.4,255.6z"/>
+            <path className="iL3" d="M1409.6,146.6h-79.3V176h77.2c11.3,0,15.7,5.2,15.7,18.4c0,0.1,0,3.8,0,4.9c-3.2,0-64,0-64,0c-24.3,0-36.4,12.2-36.4,39.7v6.5c0,28.3,12.5,39.6,37.8,39.6h93.8v-91.1C1454.4,159.2,1442.9,146.6,1409.6,146.6z M1363.9,255.6c-4.8,0-10.1-2.4-10.1-14.3c0-11.9,5.3-14,10.1-14c0,0,56.2,0,59.4,0v28.3C1420.1,255.6,1363.9,255.6,1363.9,255.6z"/>
+            <path className="iL3" d="M760.2,146.6v29.2c0,0,41.4,0,44.5,0c0,3.2,0,109.5,0,109.5h31.5c0,0,0-106.2,0-109.5c3.1,0,44.5,0,44.5,0v-29.2H760.2z"/>
+            <path className="iL3" d="M1199.3,146.6v29.2c0,0,41.3,0,44.5,0c0,3.2,0,109.5,0,109.5h31.5c0,0,0-106.2,0-109.5c3.1,0,44.5,0,44.5,0v-29.2H1199.3z"/>
+            <path className="iL3" d="M1049.2,236.7v-41.5c0-36.3-14.1-48.6-45.9-48.6H919v138.6h85.8C1038.5,285.2,1049.2,268.5,1049.2,236.7z M1017,237.3c0,13.3-4.5,18.4-15.8,18.4c0,0-47.6,0-50.7,0v-79.6c3.1,0,50.7,0,50.7,0c11.3,0,15.8,5.2,15.8,18.4C1017,194.7,1017,237.3,1017,237.3z"/>
+            <path className="iL3" d="M585.4,252.2c-0.7-1.3-42.8-83.3-47.9-91.3c-5.9-9.3-13.2-15.8-27-15.8c-12.9,0-28.1,5.7-28.1,36.6v103.7h31.1c0,0,0-80.2,0-86.5c0-6.2-0.4-15.4-0.5-17.2c-0.1-1.5,0-3,0.8-3.4c0.9-0.5,1.8,0.3,2.4,1.5c0.6,1.2,39.6,78.3,47.9,91.3c5.9,9.3,13.2,15.8,27,15.8c12.8,0,28.1-5.7,28.1-36.6V146.6h-31c0,0,0,80.2,0,86.5c0,6.2,0.4,15.4,0.5,17.3c0.1,1.5,0,3-0.8,3.4C586.9,254.2,586,253.4,585.4,252.2z"/>
+          </svg>
+        </div>
         <div className="fade-up" style={{ display: "inline-flex", alignItems: "center", gap: "0.5rem", background: "rgba(255,255,255,0.07)", border: "1px solid rgba(255,255,255,0.15)", borderRadius: 20, padding: "0.35rem 1rem", marginBottom: "2rem" }}>
           <span style={{ width: 7, height: 7, borderRadius: "50%", background: C.accent, display: "inline-block" }} />
           <span className="mono" style={{ fontSize: "0.75rem", color: "rgba(255,255,255,0.8)", letterSpacing: "0.1em" }}>AI-POWERED TOOL EVALUATION</span>
         </div>
-        <h1 className="fraunces shimmer-text fade-up-1" style={{ fontSize: "clamp(2.4rem, 6vw, 3.5rem)", fontWeight: 700, lineHeight: 1.08, marginBottom: "1.25rem" }}>
+        <h1 className="fraunces fade-up-1" style={{ fontSize: "clamp(2.4rem, 6vw, 3.5rem)", fontWeight: 700, lineHeight: 1.08, marginBottom: "1.25rem", color: "#ffffff" }}>
           AI-Enabled Data Catalog<br />Evaluation
         </h1>
         <p className="fade-up-2" style={{ fontSize: "1.05rem", color: "rgba(255,255,255,0.58)", lineHeight: 1.7, marginBottom: "2.5rem", maxWidth: 520, margin: "0 auto 2.5rem" }}>
